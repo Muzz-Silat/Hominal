@@ -14,8 +14,14 @@ function testinjection(){
     this.style.height =
         (this.scrollHeight) + 'px';
 }
-
-
 test.addEventListener('input', testinjection)
-document.addEventListener('click', function(){    test.selectionStart = test.selectionEnd = test.value.length;
+document.addEventListener('click', function(){
+    test.selectionStart = test.selectionEnd = test.value.length;
 })
+document.getElementById('command')
+.addEventListener('keyup', function(event) {
+    if (event.code === 'Enter'){
+        event.preventDefault();
+        document.querySelector('form').submit();
+    }
+});

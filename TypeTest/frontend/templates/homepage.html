@@ -12,7 +12,11 @@
     <body>
         <div class= "background">
             <span class= "Intro">TypeTest [Version 1.01], All Rights Reserved.</span>
-            <textarea class="terminal-input"  spellcheck="false">C:\User\TypeTest></textarea>
+            <form method="POST">
+                {% csrf_token %}
+                <textarea class="terminal-input" id="command" name= "command" spellcheck="false">C:\User\TypeTest></textarea>
+                <input type= "submit" class="command-submit"/>
+            </form>
         </div>
     </body>
 
