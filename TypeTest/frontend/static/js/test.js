@@ -20,7 +20,8 @@ document.addEventListener('click', function(){
 })
 document.getElementById('command')
 .addEventListener('keyup', function(event) {
-    if (event.code === 'Enter'){
+    if (event.code === 'Enter')
+{
         event.preventDefault();
         document.querySelector('form').submit();
     }

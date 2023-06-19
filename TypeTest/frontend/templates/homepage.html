@@ -17,6 +17,9 @@
                 <textarea class="terminal-input" id="command" name= "command" spellcheck="false">C:\User\TypeTest></textarea>
                 <input type= "submit" class="command-submit"/>
             </form>
+            {% if context %}
+            <p> {{context}} </p>
+            {% endif %}
         </div>
     </body>
 
