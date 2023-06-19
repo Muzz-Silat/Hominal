@@ -1,27 +1,33 @@
-let test = document.getElementsByClassName("terminal-input")[0];
-console.log(test);
+const tag = `C:\\User\\TypeTest>`;
 
-const compareto = `C:\\User\\TypeTest>`;
+let input = document.getElementsByClassName("terminal-input")[0];
 
-function testinjection(){
-    if(!(test.value.includes(compareto)) || test.value[0] != 'C'){
-        test.value = compareto
+input.focus();
+cursorHandler();
+
+function cursorHandler(){
+    //ensures the tag remains the same
+    if(!(input.value.includes(tag)) || input.value[0] != 'C'){
+        input.value = tag;
     }
 
-    test.selectionStart = test.selectionEnd = test.value.length;
+    //keeps the textarea size good
+    input.style.height = 'auto';
+    input.style.height =
+    (input.scrollHeight) + 'px';
 
-    this.style.height = 'auto';
-    this.style.height =
-        (this.scrollHeight) + 'px';
+    if(input.selectionStart == input.selectionEnd && input.selectionStart < tag.length){
+        input.selectionStart = input.selectionEnd = tag.length;
+    }
 }
-test.addEventListener('input', testinjection)
-document.addEventListener('click', function(){
-    test.selectionStart = test.selectionEnd = test.value.length;
-})
+
+input.addEventListener('input', cursorHandler)
+document.addEventListener('click', cursorHandler)
+input.addEventListener('keyup', cursorHandler)
+
 document.getElementById('command')
 .addEventListener('keyup', function(event) {
-    if (event.code === 'Enter')
-{
+    if (event.code === 'Enter'){
         event.preventDefault();
         document.querySelector('form').submit();
     }
