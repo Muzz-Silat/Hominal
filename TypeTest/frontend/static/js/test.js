@@ -4,7 +4,7 @@ console.log(test);
 const compareto = `C:\\User\\TypeTest>`;
 
 function testinjection(){
-    if(!(test.value.includes(compareto))){
+    if(!(test.value.includes(compareto)) || test.value[0] != 'C'){
         test.value = compareto
     }
 
@@ -17,3 +17,5 @@ function testinjection(){
 
 
 test.addEventListener('input', testinjection)
+document.addEventListener('click', function(){    test.selectionStart = test.selectionEnd = test.value.length;
+})
