@@ -1,9 +1,10 @@
 const tag = `C:\\User\\TypeTest>`;
 
 let input = document.getElementsByClassName("terminal-input")[0];
-console.log(input)
 input.focus();
 cursorHandler();
+
+
 
 function cursorHandler(){
     //ensures the tag remains the same
@@ -28,27 +29,38 @@ input.addEventListener('keyup', cursorHandler)
 document.getElementById('command')
 .addEventListener('keyup', function(event) {
     if (event.code === 'Enter'){
-        event.preventDefault();
-        document.querySelector('form').submit();
+        //event.preventDefault();
+        //document.querySelector('form').submit();
+
+        //formatting output from the textarea to the true user input (inputValue)
+        let inputValue = input.value;
+        inputValue = inputValue.replace(tag, "")
+        console.log("isolated input: " + inputValue)
+
+        //handing off input to the input handler
+        inputResponse(inputValue)
+
+        let newline = document.createElement("span");
+        console.log(input.value)
+        newline.innerHTML = input.value;
+        input.before(newline)
+        input.value = tag;
     }
 });
 
-console.log("cum")
-document.addEventListener('DOMContentLoaded', function() {
-    console.log(response.innerHTML)
-});
 
+function inputResponse(inputVal) {   
+    fetch(`/commands/${inputVal}`)
+    .then(response => response.text())
+    .then(text => {
+        console.log(text);
+        let newline = document.createElement("span");
 
-// xhr = new XMLHttpRequest();
-// var url = "url";
-// xhr.open("POST", url, true);
-// xhr.setRequestHeader("Content-type", "application/json");
-// xhr.onreadystatechange = function () { 
-//     if (xhr.readyState == 4 && xhr.status == 200) {
-//         var json = JSON.parse(xhr.responseText);
-//         console.log(json.email + ", " + json.name)
-//     }
-// }
-
-// var data = JSON.stringify({"email":"tomb@raider.com","name":"LaraCroft"});
-// xhr.send(data);
+        if(text == "0x0001"){
+            
+        }else{
+            newline.innerHTML = text;
+            input.before(newline)
+        }
+    });
+}

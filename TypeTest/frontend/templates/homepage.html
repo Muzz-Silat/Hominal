@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang= "en">
+
     <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta charset="utf-8">
@@ -9,19 +10,14 @@
         <link rel="stylesheet" href="../static/css/home.css" media="screen">
         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Ubuntu+Mono" />
     </head>
+
     <body>
         <div class= "background">
             <span class= "Intro">TypeTest [Version 1.01], All Rights Reserved.</span>
-            <form method="POST">
-                {% csrf_token %}
-                <textarea class="terminal-input" id="command" name= "command" spellcheck="false">C:\User\TypeTest></textarea>
-                <input type= "submit" class="command-submit"/>
-            </form>
-            {% if context %}
-            <p id="resposne"> {{context.response}} </p>
-            {% endif %}
+            <textarea class="terminal-input" id="command" name= "command" spellcheck="false">C:\User\TypeTest></textarea>
+            <input type= "submit" class="command-submit"/>
         </div>
     </body>
     <script src="../static/js/jquery-3.7.0.js"></script>
-    <script src="../static/js/test.js" async></script>
+    <script src="../static/js/test.js"></script>
 </html>

@@ -1,7 +1,7 @@
 body {
     background-color: black;
     font-family: Ubuntu Mono;
-    font-size: 32px;
+    font-size: 1.5em;
     color: #ffffff;
     padding-left: 1%;
     padding-right: 1%;
@@ -9,6 +9,10 @@ body {
 
 span {
     display: block;
+    margin-bottom: 1%;
+}
+.Intro{
+
 }
 .terminal-input{
     background-color: inherit;
@@ -20,7 +24,6 @@ span {
     width: 100%;
     height: auto;
     padding: 0;
-    margin-top: 4%;
 }
 .terminal-input:focus{
     border-style: none;
