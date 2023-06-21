@@ -7,14 +7,10 @@ body {
     padding-right: 1%;
 }
 
-span {
-    display: block;
-    margin-bottom: 1%;
-}
 .Intro{
 
 }
-.terminal-input{
+/* .terminal-input{
     background-color: inherit;
     font-family: inherit;
     font-size: inherit;
@@ -31,4 +27,4 @@ span {
 }
 .command-submit{
     display: none;
-}
+} */
