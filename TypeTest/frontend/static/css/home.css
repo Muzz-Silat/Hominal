@@ -8,23 +8,19 @@ body {
 }
 
 .Intro{
+    margin-top: 1%;
+}
 
+.line{
+    display: block ;
+    margin-top: 1%;
 }
-/* .terminal-input{
-    background-color: inherit;
-    font-family: inherit;
-    font-size: inherit;
-    color: inherit;
-    border-style: hidden;
-    resize: none;
-    width: 100%;
-    height: auto;
-    padding: 0;
+
+#terminalInput{
+    margin-top: 1%;
 }
-.terminal-input:focus{
-    border-style: none;
+#input:focus{
+    border: none;
     outline: none;
+    margin: 0;
 }
-.command-submit{
-    display: none;
-} */
