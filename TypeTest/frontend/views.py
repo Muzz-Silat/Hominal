@@ -15,10 +15,11 @@ def commands(request, command = None):
         case "help":
             return HttpResponse("\'{}\' is currently currently unreleased".format(command))
         case None:
+            return HttpResponse("0x0000")
+        case "clear":
             return HttpResponse("0x0001")
         case _:
             return HttpResponse("\'{}\' is not recognized as an internal or external command,operable program or batch file.".format(command))
-
 # from django.shortcuts import render
 # from django.http import HttpResponse
 # from django.template import loader  

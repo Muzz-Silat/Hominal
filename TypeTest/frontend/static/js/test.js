@@ -33,10 +33,18 @@ function inputResponse(inputVal) {
     .then(response => response.text())
     .then(text => {
         console.log(text);
-        if(text == "0x0001"){
-            
-        }else{
-            newline.create(text);
+        switch(text){
+            case "0x0000":
+                text = "";
+                break;
+            case "0x0001":
+                while(document.getElementsByClassName("line").length > 0){
+                    document.getElementsByClassName("line")[0].remove()
+                }
+                break;
+            default:
+                newline.create(text);
+                break;
         }
     });
 }
