@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
 from .helpcmd import help
+from .tagcmd import tag
 
 
 # Create your views here.
@@ -20,10 +21,12 @@ def commands(request, command = None):
     match command:
         case "help":
             return HttpResponse(help(keywords))
+        case "clear":
+            return HttpResponse("0x0001")
+        case "tag":
+            return HttpResponse(tag(keywords))
         case None:
             #all codes are handled thorugh js on forntend
             return HttpResponse("0x0000")
-        case "clear":
-            return HttpResponse("0x0001")
         case _:
             return HttpResponse("\'{}\' is not recognized as an internal or external command,operable program or batch file.".format(command))

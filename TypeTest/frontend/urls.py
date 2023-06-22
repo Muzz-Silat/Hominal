@@ -5,5 +5,4 @@ urlpatterns = [
     path('', views.homepage),
     path("commands/", views.commands),
     path("commands/<str:command>", views.commands),
-
 ]

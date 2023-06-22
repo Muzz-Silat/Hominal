@@ -3,6 +3,7 @@ var newline = new NewLine();
 
 //tagElement refers to the span that contains the prompt tag.
 var tagElement = document.getElementById("tag")
+var tagElementName = document.getElementById("tag-name")
 var tag = tagElement.innerHTML
 
 //refers to the div that holds both the tag and input spans.
@@ -33,44 +34,70 @@ input.addEventListener('keyup', function(event) {
         newline.create(tag + input.innerHTML);
         input.innerHTML = "";
         commands.push(inputValue)
-        current_command = commands.length
+        current_command = commands.length;
     }
     else if (event.code === "ArrowUp" && current_command != 0){
-        console.log("going back in history")
         current_command -= 1
-        input.innerHTML = commands[current_command]
-        setCarat(input)
+        setCommandValue();
     }
     else if (event.code === "ArrowDown" && current_command != commands.length){
         current_command += 1
-        if (commands[current_command] === undefined){
-            input.innerHTML = ""
-        }
-        else {
-            input.innerHTML = commands[current_command]
-        }
-        setCarat(input)
+        setCommandValue();
     }
 });
+
+function setCommandValue(){
+    if (commands[current_command] === undefined){
+        input.innerHTML = ""
+    }
+    else {
+        input.innerHTML = commands[current_command]
+    }
+    setCarat(input)
+}
 
 function inputResponse(inputVal) {   
     fetch(`/commands/${inputVal}`)
     .then(response => response.text())
     .then(text => {
         console.log(text);
-        switch(text){
-            case "0x0000":
+        switch(true){
+            case text.includes("0x0000"):
                 text = "";
                 break;
-            case "0x0001":
+            case text.includes("0x0001"):
                 while(document.getElementsByClassName("line").length > 0){
                     document.getElementsByClassName("line")[0].remove()
                 }
                 break;
-            default:
+            case text.includes("0x0002"):
+                text = text.replace("0x0002", "")
+                tagElementName.innerHTML = text+"@type-test"
+                tag = tagElement.innerHTML;
+                text = "name successfully changed to: " + text;
                 newline.create(text);
                 break;
+
+            case text.includes("0x0003"):
+                text = text.replace("0x0003", "");
+                if(text == "default"){
+                    tagElementName.style.color = 'rgb(138,223,50)'
+                    tag = tagElement.innerHTML;
+                }else{
+                    tagElementName.style.color = "#"+text
+                    tag = tagElement.innerHTML;
+                }
+                text = "color changed successfully!";
+                newline.create(text);
+                break;
+
+            default:
+                console.log("running")
+                newline.create(text);
+                window.scrollTo(0, document.body.scrollHeight)
+                break;
         }
+        window.scrollTo(0, document.body.scrollHeight)
     });
 }
 
@@ -116,4 +143,9 @@ input.onkeydown = function (e) {
             e.returnValue = false;
         }
     }
+    window.scrollTo(0, document.body.scrollHeight)
 };
+
+function print(sakmfdadksl){
+    console.log(sakmfdadksl)
+}
