@@ -1,24 +1,28 @@
+//object that handles newlines
 var newline = new NewLine();
 
+//tagElement refers to the span that contains the prompt tag.
 var tagElement = document.getElementById("tag")
 var tag = tagElement.innerHTML
 
+//refers to the div that holds both the tag and input spans.
 var inputElement = document.getElementById("terminalInput")
+
+//refers to the input span.
 let input = document.getElementById("input");
-//focuses on input on load
+
+//focuses on input on load.
 input.focus();
 
-
+//focuses the users caret onto the current input span (on document click).
 document.addEventListener('click', function(){input.focus()})
 
+//handles the submission of the input
 input.addEventListener('keyup', function(event) {
     if (event.code === 'Enter'){
-        
-        //event.preventDefault();
-        //document.querySelector('form').submit();
-
-        //formatting output from the textarea to the true user input (inputValue)
+        //formatting the users input, i.e. sanitising input.
         let inputValue = convertToPlain(input.innerHTML);
+        inputValue = inputValue.replace("/", "")
         console.log("isolated input: " + inputValue)
 
         //handing off input to the input handler
@@ -73,6 +77,7 @@ function convertToPlain(html){
     return tempDivElement.textContent || tempDivElement.innerText || "";
 }
 
+//ensures that contenteditables dont get <br> added in when enter is pressed
 input.onkeydown = function (e) {
     if(e.code === 'Enter'){
         if (!e) {
