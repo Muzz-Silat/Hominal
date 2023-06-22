@@ -8,13 +8,14 @@ def homepage(request):
     return render(request, "homepage.html")
 
 def commands(request, command = None):
-    print(request)
-    print(command)
-    
     if(command != None):
         keywords = ' '.join(command.split())
         keywords = keywords.split(" ")
         command = keywords[0]
+    
+    # handling an input of only spaces
+    if (command == ''):
+        command = None
 
     match command:
         case "help":

@@ -24,14 +24,14 @@ def help(specify = None):
 
             "tag/" + "{[-n]} " + " {[-c]}" + br,
             indentC + "options:/" + " ",
-            indentC + indent + "-n/ {str}",
-            indentC + indent + "color/ {hex}" + br,
+            indent + "-n/ {str}",
+            indent + "color/ {hex}" + br,
 
         ]
 
-        for i in range(commands.__len__()):
+        for i in range(len(commands)):
             commandforward = ""
-            if commands[i].split("9").__len__() > 1:
+            if len(commands[i].split("9")) > 1:
                 commandforward = commands[i].split("9")[0]
                 commands[i] = commands[i].split("9")[1]
 
@@ -40,8 +40,8 @@ def help(specify = None):
             params = command[1]
             command = command[0]
             commands[i] = command
-            if command.__len__() != 8:
-                for j in range(8-command.__len__()):
+            if len(command) != 8:
+                for j in range(8-len(command)):
                     commands[i] = commands[i] + space
                 commands[i] = commandforward+commands[i]+params
         

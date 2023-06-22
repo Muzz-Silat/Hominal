@@ -8,6 +8,9 @@ var tag = tagElement.innerHTML
 //refers to the div that holds both the tag and input spans.
 var inputElement = document.getElementById("terminalInput")
 
+var current_command;
+var commands = [];
+
 //refers to the input span.
 let input = document.getElementById("input");
 
@@ -29,6 +32,24 @@ input.addEventListener('keyup', function(event) {
         inputResponse(inputValue)
         newline.create(tag + input.innerHTML);
         input.innerHTML = "";
+        commands.push(inputValue)
+        current_command = commands.length
+    }
+    else if (event.code === "ArrowUp" && current_command != 0){
+        console.log("going back in history")
+        current_command -= 1
+        input.innerHTML = commands[current_command]
+        setCarat(input)
+    }
+    else if (event.code === "ArrowDown" && current_command != commands.length){
+        current_command += 1
+        if (commands[current_command] === undefined){
+            input.innerHTML = ""
+        }
+        else {
+            input.innerHTML = commands[current_command]
+        }
+        setCarat(input)
     }
 });
 
@@ -76,6 +97,12 @@ function convertToPlain(html){
     // Retrieve the text property of the element 
     return tempDivElement.textContent || tempDivElement.innerText || "";
 }
+
+function setCarat(element) {
+    element.focus()
+    window.getSelection().selectAllChildren(element)
+    window.getSelection().collapseToEnd()
+}    
 
 //ensures that contenteditables dont get <br> added in when enter is pressed
 input.onkeydown = function (e) {
