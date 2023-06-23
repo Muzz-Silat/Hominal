@@ -3,7 +3,7 @@ def tag(command):
 
     if(len(command) == 3):
         match command[1]:
-            case "name":
+            case "-n":
                 return "0x0002"+command[2]
             
             case "color":

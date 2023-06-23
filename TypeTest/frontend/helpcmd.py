@@ -45,7 +45,7 @@ def help(specify):
 
             "help/" + "[command]",
 
-            "tag/" + "{[-n]} " + " {[-c]}" + br,
+            "tag/" + "{[-n]} " + " {[color]}" + br,
             indentC + "options:/" + " ",
             indent + "-n/ {str}",
             indent + "color/ {hex}" + br,
