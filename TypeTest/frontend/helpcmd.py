@@ -50,6 +50,8 @@ def help(specify):
             indent + "-n/ {str}",
             indent + "color/ {hex}" + br,
 
+            "run/" + "[program]"
+
         ]
 
         commands = formatOutput(commands)

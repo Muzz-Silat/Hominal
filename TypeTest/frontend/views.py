@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse, Http404
 from .helpcmd import help
 from .tagcmd import tag
+from .runcmd import run
 
 
 # Create your views here.
@@ -25,6 +26,8 @@ def commands(request, command = None):
             return HttpResponse("0x0001")
         case "tag":
             return HttpResponse(tag(keywords))
+        case "run":
+            return HttpResponse(run(keywords))
         case None:
             #all codes are handled thorugh js on forntend
             return HttpResponse("0x0000")

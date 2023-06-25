@@ -90,7 +90,10 @@ function inputResponse(inputVal) {
                 text = "color changed successfully!";
                 newline.create(text);
                 break;
-
+            case text.includes("0x0004"):
+                let runobj = new typeTest(inputElement);
+                runobj.run()
+                break;
             default:
                 console.log("running")
                 newline.create(text);
@@ -112,6 +115,165 @@ function NewLine(){
         that.newline.innerHTML = this.text;
         inputElement.before(that.newline)
     }
+}
+
+function typeTest(terminalInput){
+    let that = this;
+
+    this.run = function(){
+        this.container = that.createElement("div", "container", "")
+        this.container.style.display = "block"
+        this.container.style.width = window.innerWidth
+        this.container.style.height = "90vh"
+        terminalInput.before(this.container)
+        terminalInput.style.display = "none"
+
+        this.words = that.createElement("div", "", "words")
+        this.container.appendChild(this.words)
+
+        this.input = that.createElement("input", "type-testInput", "")
+        this.words.after(this.input)
+
+        this.caret = that.createElement("div", "caret", "caret")
+        this.container.appendChild(this.caret)
+
+        this.test_input = "this is a test sentence"
+        this.words.innerHTML = that.displayTextGenerator(this.test_input)
+
+        this.letters = document.getElementsByTagName("letter")
+        for(i = 0; i < this.letters.length; i ++){
+            this.letters[i].className = "default"
+        }
+        window.scrollTo(0, document.body.scrollHeight);
+
+        window.addEventListener("scroll", function(){
+            window.scrollTo(0, document.body.scrollHeight);
+        })
+
+
+        this.input.value = "";
+        this.input.focus()
+        that.moveCaret(this.letters[0], this.caret, this.letters[0])
+        let keysPressed = {};
+
+        this.input.addEventListener("input", function(event){
+            if (that.input.value.length > 0){
+                for(i = that.input.value.length; i < that.letters.length; i ++){
+                    that.letters[i].className = "default"
+                }
+            }
+            for(i = 0; i < that.input.value.length; i++){
+                if(that.input.value[i] == that.letters[i].innerText){
+                    that.letters[i].className = "correct"
+                }
+                else{
+                    that.letters[i].className = "incorrect"
+                }
+                this.caretIndex = that.input.value.length;
+                if(this.caretIndex<=that.letters.length-1){
+                    that.moveCaret(
+                        that.letters[this.caretIndex],
+                        that.caret,
+                        that.letters[0]
+                    )
+                }
+            }
+            let default_letters = document.getElementsByClassName("default")
+            let incorrect_letters = document.getElementsByClassName("incorrect")
+            console.log(default_letters.length, incorrect_letters.length)
+            if(default_letters.length === 1 && incorrect_letters.length === 0){
+                exit(terminalInput)
+            }
+        })
+
+        this.input.addEventListener("keyup", function(event){
+            delete keysPressed[event.key]
+            if(event.code === "Backspace"){
+                for(i = that.input.value.length; i < that.letters.length; i ++){
+                    that.letters[i].className = "default"
+                }
+            }
+            this.caretIndex = that.input.value.length;
+            if(this.caretIndex<=that.letters.length-1){
+                that.moveCaret(
+                    that.letters[this.caretIndex],
+                    that.caret,
+                    that.letters[0]
+                )
+                console.log(that.letters[this.caretIndex].getBoundingClientRect().left,
+                that.letters[this.caretIndex].getBoundingClientRect().top,)
+            }
+        })
+        this.input.addEventListener("keydown", function(event){
+            keysPressed[event.key] = true;
+            if(keysPressed['Control'] && event.key == 'c'){
+                    exit(terminalInput)
+            }
+        })
+    }
+
+    this.createElement = function(eTagname, eId = "", eClass = ""){
+        this.el = document.createElement(eTagname);
+        this.el.className = eClass;
+        this.el.id = eId;
+        return this.el
+    }
+
+
+    this.displayTextGenerator = function(sen){
+        this.sen = sen.split(" ")
+        this.finalSen = [];
+        for(var i = 0; i<this.sen.length; i++){
+            this.finalSen.push(Object.assign([ ], this.sen[i]))
+        }
+
+        this.html = "";
+        for(var i = 0; i<this.finalSen.length; i++){
+            //creating word tag and closing after for loop
+            this.html += "<word>"
+            //adds the letters inside the word
+            for(var j = 0; j<this.finalSen[i].length; j++){
+                this.html += "<letter class='default'>" + this.finalSen[i][j] + "</letter>"
+            }
+            this.html += "</word>"
+            // //adds a space after every word that needs it
+            this.html += "<letter class='correct space'> </letter>";
+        }
+        return this.html;
+    }
+
+    this.moveCaret = function(currentLetter, caret, letter){
+        currentLetter = that.getPosition(currentLetter);
+        this.x = currentLetter[0];
+        this.y = currentLetter[1];
+        this.caret = caret;
+        this.letter = letter;
+
+        this.caret.style.left = this.x.toString()+"px";
+        this.caret.style.top = this.y.toString()+"px";
+        // this.caret.style.height = letter.offsetLength + "px"
+        // this.caret.style.width = (letter.offsetWidth / 5) + "px"
+        this.caret.style.fontsize = "1.5rem" 
+    }
+
+    this.getPosition = function(elem) {
+        var left = 0,
+            top = 0;
+
+        do {
+            left += elem.offsetLeft;
+            top += elem.offsetTop;
+        } while ( elem = elem.offsetParent );
+
+        return [left, top];
+    }
+}
+function exit(terminalInput){
+    var container = document.getElementById("container")
+    console.log("exit is called")
+    container.remove()
+    terminalInput.style.display = ""
+    input.focus()
 }
 
 function convertToPlain(html){
@@ -146,6 +308,6 @@ input.onkeydown = function (e) {
     window.scrollTo(0, document.body.scrollHeight)
 };
 
-function print(sakmfdadksl){
-    console.log(sakmfdadksl)
+function print(text){
+    console.log(text)
 }

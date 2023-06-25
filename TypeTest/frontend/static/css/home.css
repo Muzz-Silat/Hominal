@@ -42,3 +42,51 @@ html{
     border: 6px solid transparent;
     background-clip: content-box;
 }
+.caret{
+    width: 0.1em;
+    height: 1.2em;
+    background-color: yellow;
+    position: absolute;
+    top: 0;
+    left: 0;
+    animation: pulse 0.8s infinite;
+    -webkit-animation: pulse 0.8s infinite;
+    z-index: -1;
+}
+
+.default{
+    color: white;
+}
+.incorrect{
+    color: red;
+}
+.correct{
+    color: greenyellow;
+}
+#type-testInput{
+    border: none;
+    outline: none;
+    opacity: 0;
+    cursor: default;
+}
+#type-testInput:focus{
+    border: none;
+    outline: none;
+}
+.words{
+    text-align: center;
+    width: auto;
+    display: block;
+    margin: 0 auto;
+    margin-top: 5vw;
+
+}
+
+@keyframes pulse {
+    0%, 100% {
+        opacity: 0%;
+    }
+    50% {
+        opacity: 100%;
+    }
+}
