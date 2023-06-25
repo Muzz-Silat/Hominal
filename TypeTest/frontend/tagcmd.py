@@ -1,3 +1,4 @@
+from .reponsedev import responseDeveloper
 
 def tag(command):
 
@@ -5,10 +6,13 @@ def tag(command):
         match command[1]:
             case "-n":
                 return "0x0002"+command[2]
-            
-            case "color":
+
+            case "-c":
                 return "0x0003"+command[2]
-            
+
             case _:
-                return "please enter a valid epression"
+                return responseDeveloper(["please enter a valid expression.<br>",
+                        "-n: {str} cannot have any spaces.<br>",
+                        "-c: {color} must be a valid color. see 'help tag' for more information"])
     return "invalid number of parameters"
+

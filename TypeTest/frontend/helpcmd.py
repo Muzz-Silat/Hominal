@@ -41,17 +41,15 @@ def help(specify):
         ]
 
         commands = [
-            "clear/" + "[-c]",
+            "clear/" + "[-c]"+br,
 
-            "help/" + "[command]",
+            "help/" + "[command]"+br,
 
-            "tag/" + "{[-n]} " + " {[color]}" + br,
+            "tag/" + "{[-n]} " + " {[-c]}",
             indentC + "options:/" + " ",
-            indent + "-n/ {str}",
-            indent + "color/ {hex}" + br,
-
-            "run/" + "[program]"
-
+            indent + "-n/ {name}",
+            indent + "-c/ {color}" + br,
+            "run/" + "{program}",
         ]
 
         commands = formatOutput(commands)
@@ -71,6 +69,36 @@ def help(specify):
                     indentC+indentS+"clear",
                     br,
                     indentC+"DESCRIPTION",
-                    indentC+indentS+"clear clears your screen if this is possible.",
+                    indentC+indentS+"clears your screen if this is possible.",
                 ]
                 return (responseDeveloper(array))
+
+            case "tag":
+                    array = [
+                        indentC+"NAME",
+                        indentC+indentS+"tag - allows customization of prompt tag",
+                        br,
+                        indentC+"COMMAND",
+                        indentC+indentS+"tag, immediate parameter: [-n, -c] are required",
+                        br,
+                        indentC+"DESCRIPTION"
+                    ]
+
+                    array2 = [
+                        indentC+indentS+"-n: {name} cannot have any spaces.<br>",
+                        indentC+indentS+"-c: {color} must be a valid hex color in the format hex(XXXXXX),",
+                        indentC+indentS+"or an RGB color in the format 'rgb(x,x,x)'.",
+                        indentC+indentS+"Alternatively, a predefined CSS color, i.e:<br>",
+                        indentC+indentS+indentS+"- Red",
+                        indentC+indentS+indentS+"- Orange",
+                        indentC+indentS+indentS+"- Yellow",
+                        indentC+indentS+indentS+"- Green",
+                        indentC+indentS+indentS+"- Blue",
+                        indentC+indentS+indentS+"- Purple",
+                        indentC+indentS+indentS+"- Pink",
+                        indentC+indentS+indentS+"- Brown",
+                        indentC+indentS+indentS+"- Gray",
+                        indentC+indentS+indentS+"- Black"+br,
+                        indentC+indentS+"or simply type 'default' to return to the original color"
+                    ]
+                    return (responseDeveloper(array+array2))

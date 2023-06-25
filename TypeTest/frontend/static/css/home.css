@@ -43,12 +43,10 @@ html{
     background-clip: content-box;
 }
 .caret{
-    width: 0.1em;
-    height: 1.2em;
     background-color: yellow;
     position: absolute;
-    top: 0;
-    left: 0;
+    width: 0.1em;
+    height: 2em;
     animation: pulse 0.8s infinite;
     -webkit-animation: pulse 0.8s infinite;
     z-index: -1;
@@ -59,6 +57,9 @@ html{
 }
 .incorrect{
     color: red;
+}
+.ghost{
+    opacity: 0.5;
 }
 .correct{
     color: greenyellow;
@@ -74,12 +75,19 @@ html{
     outline: none;
 }
 .words{
+    font-size:2em;
     text-align: center;
-    width: auto;
+    width: fit-content;
     display: block;
     margin: 0 auto;
     margin-top: 5vw;
-
+    padding: 2vw;
+    border: solid 0.5vw white;
+    border-radius: 0.5vw;
+    -webkit-border-radius: 0.5vw;
+    -moz-border-radius: 0.5vw;
+    -ms-border-radius: 0.5vw;
+    -o-border-radius: 0.5vw;
 }
 
 @keyframes pulse {
