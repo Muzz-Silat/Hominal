@@ -1,5 +1,9 @@
-function typeTest(terminalInput){
+function TypeTest(terminalInput){
     let that = this;
+
+    this.stopScroll = function(){
+        window.scrollTo(0, document.body.scrollHeight);
+    }
 
     this.run = function(){
         this.container = that.createElement("div", "container", "")
@@ -30,9 +34,7 @@ function typeTest(terminalInput){
 
         document.addEventListener("click", function(){that.input.focus()})
 
-        window.addEventListener("scroll", function(){
-            window.scrollTo(0, document.body.scrollHeight);
-        })
+        window.addEventListener("scroll", this.stopScroll)
 
 
         this.input.value = "";
@@ -83,7 +85,7 @@ function typeTest(terminalInput){
             let default_letters = document.getElementsByClassName("default")
             let incorrect_letters = document.getElementsByClassName("incorrect")
             if(default_letters.length === 1 && incorrect_letters.length === 0){
-                new exit(terminalInput)
+                that.exit()
             }
         })
 
@@ -113,7 +115,7 @@ function typeTest(terminalInput){
         this.input.addEventListener("keydown", function(event){
             keysPressed[event.key] = true;
             if(keysPressed['Control'] && event.key == 'c'){
-                    new exit(terminalInput)
+                    that.exit()
             }
         })
     }
@@ -204,5 +206,12 @@ function typeTest(terminalInput){
                 this.element.style.borderColor = "red";
             }
         }
+    }
+
+    this.exit = function(){
+        this.container.remove()
+        terminalInput.style.display = ""
+        this.input.focus()
+        window.removeEventListener("scroll", typetest.stopScroll)
     }
 }

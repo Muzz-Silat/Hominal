@@ -18,6 +18,9 @@ let input = document.getElementById("input");
 //focuses on input on load.
 input.focus();
 
+//all sub programs
+var typetest = new TypeTest(inputElement);
+
 //focuses the users caret onto the current input span (on document click).
 document.addEventListener('click', function(){input.focus()})
 
@@ -33,7 +36,11 @@ input.addEventListener('keyup', function(event) {
         inputResponse(inputValue)
         newline.create(tag + input.innerHTML);
         input.innerHTML = "";
-        commands.push(inputValue)
+
+        //this if statement helps filter out empty entries from the list of previous entries
+        if(inputValue.replace(" ", "")!=""){
+            commands.push(inputValue)
+        }
         current_command = commands.length;
     }
     else if (event.code === "ArrowUp" && current_command != 0){
@@ -102,8 +109,7 @@ function inputResponse(inputVal) {
                 newline.create(text);
                 break;
             case text.includes("0x0004"):
-                let obj = new typeTest(inputElement);
-                obj.run()
+                typetest.run()
                 break;
             default:
                 console.log("running")
@@ -126,14 +132,6 @@ function NewLine(){
         that.newline.innerHTML = this.text;
         inputElement.before(that.newline)
     }
-}
-
-function exit(terminalInput){
-    var container = document.getElementById("container")
-    console.log("exit is called")
-    container.remove()
-    terminalInput.style.display = ""
-    input.focus()
 }
 
 function convertToPlain(html){
