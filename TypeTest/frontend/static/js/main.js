@@ -15,6 +15,8 @@ var commands = [];
 //refers to the input span.
 let input = document.getElementById("input");
 
+const commandList = ["help", "clear", "tag", "run"]
+
 //focuses on input on load.
 input.focus();
 
@@ -26,9 +28,32 @@ document.addEventListener('click', function(){input.focus()})
 
 //handles the submission of the input
 input.addEventListener('keyup', function(event) {
+    let inputValue = convertToPlain(input.innerHTML);
+    if(event.code === 'ControlLeft' && inputValue.length > 0){
+        let subCommandList = commandList.filter(str => str.startsWith(inputValue))
+        console.log(subCommandList)
+        switch (true){
+            case subCommandList[0] == "clear":
+                input.innerText = "clear"
+                setCarat(input)
+                break;
+            case subCommandList[0] == "help":
+                input.innerText = "help"
+                setCarat(input)
+                break;
+            case subCommandList[0] == "run":
+                input.innerText = "run"
+                setCarat(input)
+                break;
+            case subCommandList[0] == "tag":
+                input.innerText == "tag"
+                setCarat(input)
+                break;
+                                
+        }
+    }
     if (event.code === 'Enter'){
         //formatting the users input, i.e. sanitising input.
-        let inputValue = convertToPlain(input.innerHTML);
         inputValue = inputValue.replace("/", "")
         console.log("isolated input: " + inputValue)
 
