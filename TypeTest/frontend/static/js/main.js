@@ -138,7 +138,7 @@ function inputResponse(inputVal) {
                 newline.create(text);
                 break;
             case text.includes("0x0004"):
-                typetest.run()
+                typetest.run(text.replace("0x0004", ""))
                 break;
             default:
                 console.log("running")

@@ -1,6 +1,6 @@
 body {
     background-color: black;
-    font-family: Ubuntu Mono;
+    font-family: Ubuntu Mono, Courier, monospace;
     font-size: 1.5em;
     color: #ffffff;
     padding-left: 1%;
@@ -88,6 +88,10 @@ html{
     -moz-border-radius: 0.5vw;
     -ms-border-radius: 0.5vw;
     -o-border-radius: 0.5vw;
+}
+.testFin{
+    display: block;
+    text-align: center;
 }
 
 @keyframes pulse {

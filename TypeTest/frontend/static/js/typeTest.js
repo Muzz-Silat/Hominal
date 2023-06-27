@@ -5,7 +5,7 @@ function TypeTest(terminalInput){
         window.scrollTo(0, document.body.scrollHeight);
     }
 
-    this.run = function(){
+    this.run = function(sentence){
         this.container = that.createElement("div", "container", "")
         this.container.style.display = "block"
         this.container.style.width = window.innerWidth
@@ -22,7 +22,7 @@ function TypeTest(terminalInput){
         this.caret = that.createElement("div", "caret", "caret")
         this.container.appendChild(this.caret)
 
-        this.test_input = "The quick brown fox painted all over the fence"
+        this.test_input = sentence;
         this.words.innerHTML = that.displayTextGenerator(this.test_input)
 
         this.letters = document.getElementsByTagName("letter")
@@ -44,7 +44,6 @@ function TypeTest(terminalInput){
 
         this.input.addEventListener("input", function(event){
             input.focus()
-            that.progress()
             if (that.input.value.length > 0){
                 for(i = that.input.value.length; i < that.letters.length; i ++){
                     if(that.letters[i].className != "incorrect ghost"){
@@ -61,6 +60,7 @@ function TypeTest(terminalInput){
             for(i = 0; i < that.input.value.length; i++){
                 if(that.input.value[i] == that.letters[i].innerText && that.letters[i].className != "incorrect ghost"){
                     that.letters[i].className = "correct"
+                    that.progress()
                 }
                 else{
                     if(that.letters[i].innerText == " "){
@@ -85,7 +85,19 @@ function TypeTest(terminalInput){
             let default_letters = document.getElementsByClassName("default")
             let incorrect_letters = document.getElementsByClassName("incorrect")
             if(default_letters.length === 1 && incorrect_letters.length === 0){
-                that.exit()
+                //waiting for user to hit enter on completion of test
+                that.input.disabled = true;
+                that.caret.remove()
+                this.finished = that.createElement("span", "", "testFin")
+                this.finished.innerText = "Press enter to continue..."
+                that.container.appendChild(this.finished)
+                this.allowExit = function(e){
+                    if(e.key == "Enter"){
+                        document.removeEventListener("keyup", this.allowExit)
+                        that.exit()
+                    }
+                }
+                document.addEventListener("keyup", this.allowExit)
             }
         })
 
@@ -118,6 +130,11 @@ function TypeTest(terminalInput){
                     that.exit()
             }
         })
+    }
+
+
+    this.sentenceGenerator = function(){
+        
     }
 
     this.createElement = function(eTagname, eId = "", eClass = ""){
@@ -186,12 +203,12 @@ function TypeTest(terminalInput){
                 this.element.style.borderColor = "white";
             }
         }
-        this.multiplier = this.cLetters/this.letters.length
+        this.multiplier = this.cLetters/(this.letters.length-1)
 
         console.log(this.multiplier)
 
         switch(true){
-            case this.multiplier > 0.90:
+            case this.multiplier == 1.0:
                 this.element.style.borderLeftColor = "greenyellow";
             case this.multiplier > 0.75:
                 this.element.style.borderBottomColor = "greenyellow";
@@ -211,7 +228,7 @@ function TypeTest(terminalInput){
     this.exit = function(){
         this.container.remove()
         terminalInput.style.display = ""
-        this.input.focus()
+        document.getElementById("input").focus()
         window.removeEventListener("scroll", typetest.stopScroll)
     }
 }
