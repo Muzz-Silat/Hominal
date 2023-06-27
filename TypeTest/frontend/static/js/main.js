@@ -51,10 +51,9 @@ input.addEventListener('keyup', function(event) {
                 setCarat(input)
                 break;
             case subCommandList[0] == "tag":
-                input.innerText == "tag"
+                input.innerText = "tag"
                 setCarat(input)
                 break;
-                                
         }
     }
     if (event.code === 'Enter'){
