@@ -25,11 +25,16 @@ var typetest = new TypeTest(inputElement);
 
 //focuses the users caret onto the current input span (on document click).
 document.addEventListener('click', function(){input.focus()})
-
+input.addEventListener("keydown", function(event){
+    if(event.code === 'Tab'){
+        event.preventDefault()
+    }
+})
 //handles the submission of the input
 input.addEventListener('keyup', function(event) {
+    event.preventDefault()
     let inputValue = convertToPlain(input.innerHTML);
-    if(event.code === 'ControlLeft' && inputValue.length > 0){
+    if(event.code === 'Tab' && inputValue.length > 0){
         let subCommandList = commandList.filter(str => str.startsWith(inputValue))
         console.log(subCommandList)
         switch (true){
