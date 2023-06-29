@@ -82,7 +82,9 @@ html{
     margin: 0 auto;
     margin-top: 5vw;
     padding: 2vw;
-    border: solid 0.5vw white;
+    stroke-opacity: 0.5;
+
+    border: solid 2vw grey;
     border-radius: 0.5vw;
     -webkit-border-radius: 0.5vw;
     -moz-border-radius: 0.5vw;

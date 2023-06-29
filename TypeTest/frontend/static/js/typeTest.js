@@ -200,22 +200,42 @@ function TypeTest(terminalInput){
         for(let i = 0; i < this.letters.length; i++){
             if(this.letters[i].className == "correct"){this.cLetters++;}
             else{
-                this.element.style.borderColor = "white";
+                this.element.style.borderColor = "grey";
             }
         }
         this.multiplier = this.cLetters/(this.letters.length-1)
 
         console.log(this.multiplier)
 
+        //slowly transitioning the border colors from grey to greenyellow
+        switch(true){
+            case this.multiplier > 0.75:
+                this.colorMult = (this.multiplier-0.75)/0.25;
+                this.element.style.borderBottomColor = `rgb(${128+(49*(this.colorMult))}, ${128+(127*(this.colorMult))}, ${128-(73*(this.colorMult))})`;
+
+            case this.multiplier > 0.50:
+                this.colorMult = (this.multiplier-0.50)/0.25;
+                this.element.style.borderRightColor = `rgb(${128+(49*(this.colorMult))}, ${128+(127*(this.colorMult))}, ${128-(73*(this.colorMult))})`;
+
+            case this.multiplier > 0.25:
+                this.colorMult = (this.multiplier-0.25)/0.25;
+                this.element.style.borderTopColor = `rgb(${128+(49*(this.colorMult))}, ${128+(127*(this.colorMult))}, ${128-(73*(this.colorMult))})`;
+
+            case this.multiplier > 0.0:
+                this.colorMult = (this.multiplier-0)/0.25;
+                this.element.style.borderLeftColor = `rgb(${128+(49*(this.colorMult))}, ${128+(127*(this.colorMult))}, ${128-(73*(this.colorMult))})`;
+        }
+
+        //these only start applying the style after a border is progressed fully
         switch(true){
             case this.multiplier == 1.0:
-                this.element.style.borderLeftColor = "greenyellow";
-            case this.multiplier > 0.75:
                 this.element.style.borderBottomColor = "greenyellow";
-            case this.multiplier > 0.50:
+            case this.multiplier > 0.75:
                 this.element.style.borderRightColor = "greenyellow";
-            case this.multiplier > 0.25:
+            case this.multiplier > 0.50:
                 this.element.style.borderTopColor = "greenyellow";
+            case this.multiplier > 0.25:
+                this.element.style.borderLeftColor = "greenyellow";
         }
 
         for(let i = 0; i < this.letters.length; i++){
