@@ -83,13 +83,12 @@ html{
     margin-top: 5vw;
     padding: 2vw;
     stroke-opacity: 0.5;
-
     border: solid 2vw grey;
-    border-radius: 0.5vw;
-    -webkit-border-radius: 0.5vw;
-    -moz-border-radius: 0.5vw;
-    -ms-border-radius: 0.5vw;
-    -o-border-radius: 0.5vw;
+    border-radius: 5vw;
+    -webkit-border-radius: 5vw;
+    -moz-border-radius: 5vw;
+    -ms-border-radius: 5vw;
+    -o-border-radius: 5vw;
 }
 .testFin{
     display: block;

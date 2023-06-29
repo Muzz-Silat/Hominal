@@ -1,11 +1,16 @@
 function TypeTest(terminalInput){
     let that = this;
+    this.terminal = document.getElementById("main")
 
-    this.stopScroll = function(){
-        window.scrollTo(0, document.body.scrollHeight);
+    this.startScroll = function(){
+        terminalInput.before(that.terminal)
+        window.scrollTo(0, document.body.scrollHeight)
     }
 
+
     this.run = function(sentence){
+        that.terminal.remove()
+
         this.container = that.createElement("div", "container", "")
         this.container.style.display = "block"
         this.container.style.width = window.innerWidth
@@ -30,12 +35,9 @@ function TypeTest(terminalInput){
         for(i = 0; i < this.letters.length; i ++){
             this.letters[i].className = "default"
         }
-        window.scrollTo(0, document.body.scrollHeight);
+
 
         document.addEventListener("click", function(){that.input.focus()})
-
-        window.addEventListener("scroll", this.stopScroll)
-
 
         this.input.value = "";
         this.input.focus()
@@ -132,18 +134,12 @@ function TypeTest(terminalInput){
         })
     }
 
-
-    this.sentenceGenerator = function(){
-        
-    }
-
     this.createElement = function(eTagname, eId = "", eClass = ""){
         this.el = document.createElement(eTagname);
         this.el.className = eClass;
         this.el.id = eId;
         return this.el
     }
-
 
     this.displayTextGenerator = function(sen){
         this.sen = sen.split(" ")
@@ -172,7 +168,6 @@ function TypeTest(terminalInput){
         this.x = currentLetter[0];
         this.y = currentLetter[1];
         this.caret = caret;
-        this.letter = letter;
 
         this.caret.style.left = this.x.toString()+"px";
         this.caret.style.top = this.y.toString()+"px";
@@ -249,6 +244,6 @@ function TypeTest(terminalInput){
         this.container.remove()
         terminalInput.style.display = ""
         document.getElementById("input").focus()
-        window.removeEventListener("scroll", typetest.stopScroll)
+        that.startScroll()
     }
 }
