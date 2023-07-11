@@ -9,7 +9,7 @@ def simpleGenerator(numOfWords):
         read_file.close()
     words = random.choices(words, k=numOfWords)
     sentence = ""
-    for x in range(words.__len__()):
+    for x in range(len(words)):
         sentence += words[x] + " "
     sentence = sentence.strip()
     return sentence

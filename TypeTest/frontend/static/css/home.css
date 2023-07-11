@@ -47,9 +47,11 @@ html{
     position: absolute;
     width: 0.1em;
     height: 2em;
+    z-index: -1;
+}
+.blink {
     animation: pulse 0.8s infinite;
     -webkit-animation: pulse 0.8s infinite;
-    z-index: -1;
 }
 
 .default{
@@ -69,6 +71,8 @@ html{
     outline: none;
     opacity: 0;
     cursor: default;
+    position: fixed;
+    bottom: 0.5%;
 }
 #type-testInput:focus{
     border: none;
@@ -80,10 +84,10 @@ html{
     width: fit-content;
     display: block;
     margin: 0 auto;
-    margin-top: 5vw;
+    margin-top: 2vw;
     padding: 2vw;
     stroke-opacity: 0.5;
-    border: solid 2vw grey;
+    border: solid 1.5vw grey;
     border-radius: 5vw;
     -webkit-border-radius: 5vw;
     -moz-border-radius: 5vw;
@@ -94,7 +98,9 @@ html{
     display: block;
     text-align: center;
 }
-
+.timer{
+    display: inline-block;
+}
 @keyframes pulse {
     0%, 100% {
         opacity: 0%;

@@ -1,30 +1,28 @@
 function TypeTest(terminalInput){
     let that = this;
+    var timerRunning = false
     this.terminal = document.getElementById("main")
-
-    this.startScroll = function(){
-        terminalInput.before(that.terminal)
-        window.scrollTo(0, document.body.scrollHeight)
-    }
-
-
+    newline = new NewLine()
     this.run = function(sentence){
         that.terminal.remove()
-
         this.container = that.createElement("div", "container", "")
         this.container.style.display = "block"
         this.container.style.width = window.innerWidth
         this.container.style.height = "95vh"
         terminalInput.before(this.container)
         terminalInput.style.display = "none"
+        
+        this.timer = that.createElement("span", "timer", "timer")
+        this.timer.innerText = ""
 
         this.words = that.createElement("div", "", "words")
+        this.container.appendChild(this.timer)
         this.container.appendChild(this.words)
 
         this.input = that.createElement("input", "type-testInput", "")
-        this.words.after(this.input)
+        this.words.before(this.input)
 
-        this.caret = that.createElement("div", "caret", "caret")
+        this.caret = that.createElement("div", "caret", "caret blink")
         this.container.appendChild(this.caret)
 
         this.test_input = sentence;
@@ -35,8 +33,7 @@ function TypeTest(terminalInput){
         for(i = 0; i < this.letters.length; i ++){
             this.letters[i].className = "default"
         }
-
-
+         
         document.addEventListener("click", function(){that.input.focus()})
 
         this.input.value = "";
@@ -46,13 +43,34 @@ function TypeTest(terminalInput){
 
         this.input.addEventListener("input", function(event){
             input.focus()
+            if(!timerRunning){
+                var initialTime = Date.now()
+                var difference = 0
+                timerRunning = true
+                that.timer.innerText = "0s"
+                that.interval = setInterval(function(){
+                    difference = (Date.now() - initialTime)/1000
+                    if (timerRunning){
+                        this.timer.innerText = (Math.round((difference + Number.EPSILON) * 100) / 100).toFixed(2)
+                        + "s"
+                    }
+                    else{
+                        clearInterval(interval)
+                        timerRunning = false
+                        this.timer.innerText = ""
+                    }
+                }, 10)
+            }
             if (that.input.value.length > 0){
+                that.caret.className = "caret"
                 for(i = that.input.value.length; i < that.letters.length; i ++){
                     if(that.letters[i].className != "incorrect ghost"){
                         that.letters[i].className = "default"
                     }
                 }
-            }else{
+            }
+            else{
+                that.caret.className = "caret blink"
                 for(let i = 0; i<that.letters[i].length; i++){
                     if(that.letter[i].className.includes("ghost")){
                         that.letters[i].remove()
@@ -93,6 +111,8 @@ function TypeTest(terminalInput){
                 this.finished = that.createElement("span", "", "testFin")
                 this.finished.innerText = "Press enter to continue..."
                 that.container.appendChild(this.finished)
+                timerRunning = false
+                clearInterval(that.interval)
                 this.allowExit = function(e){
                     if(e.key == "Enter"){
                         document.removeEventListener("keyup", this.allowExit)
@@ -129,7 +149,7 @@ function TypeTest(terminalInput){
         this.input.addEventListener("keydown", function(event){
             keysPressed[event.key] = true;
             if(keysPressed['Control'] && event.key == 'c'){
-                    that.exit()
+                that.exit()
             }
         })
     }
@@ -240,10 +260,21 @@ function TypeTest(terminalInput){
         }
     }
 
+    this.startScroll = function(){
+        terminalInput.before(that.terminal)
+        window.scrollTo(0, document.body.scrollHeight)
+    }
+
     this.exit = function(){
+        clearInterval(that.interval)
+        timerRunning = false
+        numOfWords = that.words.innerText.split(" ").length
+        timeTaken = this.timer.innerText.replace("s", "")
+        wpm = (numOfWords/timeTaken) * 60
         this.container.remove()
         terminalInput.style.display = ""
         document.getElementById("input").focus()
         that.startScroll()
+        newline.create(wpm)
     }
 }

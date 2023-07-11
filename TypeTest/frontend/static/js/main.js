@@ -31,6 +31,12 @@ input.addEventListener("keydown", function(event){
     if(event.code === 'Tab'){
         event.preventDefault()
     }
+    else if(event.code === "ArrowUp"){
+        event.preventDefault();
+    }
+    else if(event.code === "ArrowDown"){
+        event.preventDefault();
+    }
 })
 //handles the submission of the input
 input.addEventListener('keyup', function(event) {
@@ -75,10 +81,12 @@ input.addEventListener('keyup', function(event) {
         current_command = commands.length;
     }
     else if (event.code === "ArrowUp" && current_command != 0){
+        event.preventDefault();
         current_command -= 1
         setCommandValue();
     }
     else if (event.code === "ArrowDown" && current_command != commands.length){
+        event.preventDefault();
         current_command += 1
         setCommandValue();
     }
@@ -146,8 +154,11 @@ function inputResponse(inputVal) {
             default:
                 console.log("running")
                 newline.create(text);
-                window.scrollTo(0, document.body.scrollHeight)
                 break;
+        }
+        if(document.getElementById("main") != null){
+            console.log(document.getElementById("main"));
+            window.scrollTo(0, document.body.scrollHeight)
         }
     });
 }
@@ -176,21 +187,22 @@ function convertToPlain(html){
     return tempDivElement.textContent || tempDivElement.innerText || "";
 }
 
-function setCarat(element) {
+function setCarat(element){
     element.focus()
     window.getSelection().selectAllChildren(element)
     window.getSelection().collapseToEnd()
 }
 
 //ensures that contenteditables dont get <br> added in when enter is pressed
-input.onkeydown = function (e) {
+input.onkeydown = function(e){
     if(e.code === 'Enter'){
-        if (!e) {
+        if(!e){
             e = window.event;
         }
-        if (e.preventDefault) {
+        if(e.preventDefault){
             e.preventDefault();
-        } else {
+        }
+        else{
             e.returnValue = false;
         }
     }
