@@ -167,12 +167,14 @@ function inputResponse(inputVal) {
 function NewLine(){
     this.newline;
     let that = this;
-    this.create = function(text){
-        this.text = text;
-        that.newline = document.createElement("span")
-        that.newline.className = "line"
-        that.newline.innerHTML = this.text;
-        mainContainer.appendChild(that.newline)
+    this.create = function(text, time = 0){
+        setTimeout(function() {
+            this.text = text;
+            that.newline = document.createElement("span")
+            that.newline.className = "line"
+            that.newline.innerHTML = this.text;
+            mainContainer.appendChild(that.newline)
+        }, time);
     }
 }
 

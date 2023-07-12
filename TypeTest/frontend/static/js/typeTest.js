@@ -1,9 +1,16 @@
 function TypeTest(terminalInput){
     let that = this;
     var timerRunning = false
+
     this.terminal = document.getElementById("main")
-    newline = new NewLine()
+
     this.run = function(sentence){
+
+        while(document.getElementsByClassName("typed")[0] != null){
+            document.getElementsByClassName("typed")[0].classList.remove("typed")
+        }
+
+        that.terminal = document.getElementById("main")
         that.terminal.remove()
         this.container = that.createElement("div", "container", "")
         this.container.style.display = "block"
@@ -11,7 +18,7 @@ function TypeTest(terminalInput){
         this.container.style.height = "95vh"
         terminalInput.before(this.container)
         terminalInput.style.display = "none"
-        
+
         this.timer = that.createElement("span", "timer", "timer")
         this.timer.innerText = ""
 
@@ -33,7 +40,7 @@ function TypeTest(terminalInput){
         for(i = 0; i < this.letters.length; i ++){
             this.letters[i].className = "default"
         }
-         
+
         document.addEventListener("click", function(){that.input.focus()})
 
         this.input.value = "";
@@ -113,9 +120,10 @@ function TypeTest(terminalInput){
                 that.container.appendChild(this.finished)
                 timerRunning = false
                 clearInterval(that.interval)
+                let here = this;
                 this.allowExit = function(e){
                     if(e.key == "Enter"){
-                        document.removeEventListener("keyup", this.allowExit)
+                        document.removeEventListener("keyup", here.allowExit)
                         that.exit()
                     }
                 }
@@ -220,8 +228,6 @@ function TypeTest(terminalInput){
         }
         this.multiplier = this.cLetters/(this.letters.length-1)
 
-        console.log(this.multiplier)
-
         //slowly transitioning the border colors from grey to greenyellow
         switch(true){
             case this.multiplier > 0.75:
@@ -268,13 +274,45 @@ function TypeTest(terminalInput){
     this.exit = function(){
         clearInterval(that.interval)
         timerRunning = false
-        numOfWords = that.words.innerText.split(" ").length
-        timeTaken = this.timer.innerText.replace("s", "")
-        wpm = (numOfWords/timeTaken) * 60
+
+        let default_letters = document.getElementsByClassName("default")
+        let incorrect_letters = document.getElementsByClassName("incorrect")
+        if(default_letters.length === 1 && incorrect_letters.length === 0){
+
+            numOfWords = that.words.innerText.split(" ").length
+            timeTaken = this.timer.innerText.replace("s", "")
+            wpm = (numOfWords/timeTaken) * 60
+            wpm = Math.round((wpm + Number.EPSILON))
+            newline.create(
+                `
+                    <result class="line typed topresult">
+                        <rtype>TIME</rtype>
+                        <rvalue>${timeTaken}s</rvalue>
+                    </result>
+                `, 0
+            )
+            newline.create(
+                `
+                    <result class="line typed">
+                        <rtype>WORDS</rtype>
+                        <rvalue>${numOfWords}</rvalue>
+                    </result>
+                `, 200
+            )
+            newline.create(
+                `
+                    <result class="line typed">
+                        <rtype>WPM</rtype>
+                        <rvalue>${wpm}</rvalue>
+                    </result>
+                    </rtable>
+                `, 400
+            )
+        }
+
         this.container.remove()
         terminalInput.style.display = ""
         document.getElementById("input").focus()
         that.startScroll()
-        newline.create(wpm)
     }
 }

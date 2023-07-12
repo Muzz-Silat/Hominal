@@ -102,3 +102,16 @@ def help(specify):
                         indentC+indentS+"or simply type 'default' to return to the original color"
                     ]
                     return (responseDeveloper(array+array2))
+
+            case "run":
+                array = [
+                        indentC+"NAME",
+                        indentC+indentS+"run - command used to start a program", #last thing edited
+                        br,
+                        indentC+"COMMAND",
+                        indentC+indentS+"tag, immediate parameter: [-n, -c] are required",
+                        br,
+                        indentC+"DESCRIPTION"
+                    ]
+                return (responseDeveloper(array+array2))
+
