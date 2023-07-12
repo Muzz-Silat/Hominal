@@ -63,7 +63,7 @@ def help(specify):
             case "clear":
                 array = [
                     indentC+"NAME",
-                    indentC+indentS+"clear - clear the terminal screen",
+                    indentC+indentS+"clear - clear the terminal screen.",
                     br,
                     indentC+"COMMAND",
                     indentC+indentS+"clear",
@@ -74,19 +74,19 @@ def help(specify):
                 return (responseDeveloper(array))
 
             case "tag":
-                    array = [
+                    array1 = [
                         indentC+"NAME",
-                        indentC+indentS+"tag - allows customization of prompt tag",
+                        indentC+indentS+"tag - allows customization of prompt tag.",
                         br,
                         indentC+"COMMAND",
-                        indentC+indentS+"tag, immediate parameter: [-n, -c] are required",
+                        indentC+indentS+"tag, immediate parameter: [-n, -c] are required.",
                         br,
                         indentC+"DESCRIPTION"
                     ]
 
                     array2 = [
-                        indentC+indentS+"-n: {name} cannot have any spaces.<br>",
-                        indentC+indentS+"-c: {color} must be a valid hex color in the format hex(XXXXXX),",
+                        indentC+indentS+"-n:"+indentS+"{Name} cannot have any spaces.<br>",
+                        indentC+indentS+"-c:"+indentS+"{Color} must be a valid hex color in the format hex(XXXXXX),",
                         indentC+indentS+"or an RGB color in the format 'rgb(x,x,x)'.",
                         indentC+indentS+"Alternatively, a predefined CSS color, i.e:<br>",
                         indentC+indentS+indentS+"- Red",
@@ -99,19 +99,25 @@ def help(specify):
                         indentC+indentS+indentS+"- Brown",
                         indentC+indentS+indentS+"- Gray",
                         indentC+indentS+indentS+"- Black"+br,
-                        indentC+indentS+"or simply type 'default' to return to the original color"
+                        indentC+indentS+"or simply type 'default' to return to the original color."
                     ]
-                    return (responseDeveloper(array+array2))
+                    return (responseDeveloper(array1 + array2))
 
             case "run":
-                array = [
+                array1 = [
                         indentC+"NAME",
-                        indentC+indentS+"run - command used to start a program", #last thing edited
+                        indentC+indentS+"run - command used to start a program.", 
                         br,
                         indentC+"COMMAND",
-                        indentC+indentS+"tag, immediate parameter: [-n, -c] are required",
+                        indentC+indentS+"run, immediate parameter: [program name] is required.",
                         br,
                         indentC+"DESCRIPTION"
                     ]
-                return (responseDeveloper(array+array2))
+                array2 = [
+                        indentC+indentS+indentS+"- typetest: Test your typing speed."+br,
+                        indentC+indentS+indentS+"options:",
+                        indentC+indentS+indentS+indentS+"-w:"+indentS+"{Words}, This mode lets you test your typing speed for a certain number of words.",
+                        indentC+indentS+indentS+indentS+"-t:"+indentS+"{Time}, This mode lets you test your typing speed for a certain number of seconds.",
+                    ]
+                return (responseDeveloper(array1 + array2))
 
