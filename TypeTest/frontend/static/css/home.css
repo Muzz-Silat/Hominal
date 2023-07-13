@@ -7,6 +7,26 @@ body {
     padding-right: 1%;
 }
 
+#main{
+    animation: fade-in;
+    animation-duration: 0.8s;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+#gameContainer{
+    animation: fade-in;
+    animation-duration: 0.8s;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+#container{
+    animation: fade-in;
+    animation-duration: 0.8s;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+
+
 .Intro{
     margin-top: 1%;
 }
@@ -18,6 +38,11 @@ body {
 
 #terminalInput{
     margin-top: 1%;
+
+    animation: fade-in;
+    animation-duration: 0.8s;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
 }
 #input:focus{
     border: none;
@@ -184,11 +209,30 @@ canvas {
 
 @keyframes typings{
     0% {
-        transform: translateX(-100%);
+        transform: translateY(-100%);
+        opacity: 0;
+        font-size: 0;
+        -webkit-transform: translateY(-100%);
+        -moz-transform: translateY(-100%);
+        -ms-transform: translateY(-100%);
+        -o-transform: translateY(-100%);
+    }
+    100% {
+        transform: translateY(0);
+        font-size: 1em;
+        opacity: 1;
+        -webkit-transform: translateY(0);
+        -moz-transform: translateY(0);
+        -ms-transform: translateY(0);
+        -o-transform: translateY(0);
+    }
+}
+
+@keyframes fade-in{
+    0% {
         opacity: 0;
     }
     100% {
-        transform: translateX(0);
         opacity: 1;
     }
 }

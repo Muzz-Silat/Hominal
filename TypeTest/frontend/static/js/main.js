@@ -73,7 +73,7 @@ input.addEventListener('keyup', function(event) {
 
         //handing off input to the input handler
         inputResponse(inputValue)
-        newline.create(tag + input.innerHTML);
+        newline.create(tag + input.innerHTML, 0, true);
         input.innerHTML = "";
 
         //this if statement helps filter out empty entries from the list of previous entries
@@ -118,6 +118,7 @@ function inputResponse(inputVal) {
                     document.getElementsByClassName("line")[0].remove()
                 }
                 break;
+
             case text.includes("0x0002"): //tag -n
                 text = text.replace("0x0002", "")
                 tagElementName.innerHTML = text+"@type-test"
@@ -151,17 +152,23 @@ function inputResponse(inputVal) {
                 break;
 
             case text.includes("0x0004"): //typetest
-                typetest.run(text.replace("0x0004", ""))
+                setTimeout(() => {
+                    typetest.run(text.replace("0x0004", ""))
+                }, 250);
                 window.scrollTo(0, 0)
                 break;
 
             case text.includes("0x0005"): //snake
-                snake.run()
+                setTimeout(() => {
+                    snake.run()
+                }, 250);
                 window.scrollTo(0, 0)
                 break;
 
             case text.includes("0x0006"): //pong
-                pong.run()
+                setTimeout(() => {
+                    pong.run()
+                }, 250);
                 window.scrollTo(0, 0)
                 break;
 
@@ -191,11 +198,11 @@ function NewLine(){
                 that.newline.classList.add("typedBlock")
             }
             mainContainer.appendChild(that.newline)
-            if(animate){
-                setTimeout(() => {
-                    document.getElementsByClassName("typedBlock")[0].classList.remove("typedBlock")
-                }, 1000);
-            }
+            setTimeout(() => {
+                while(document.getElementsByClassName("typedBlock")[0] != null){
+                        document.getElementsByClassName("typedBlock")[0].classList.remove("typedBlock")
+                }
+            }, 200);
         }, time);
     }
 }
@@ -207,7 +214,7 @@ function convertToPlain(html){
     // Set the HTML content with the given value
     tempDivElement.innerHTML = html;
 
-    // Retrieve the text property of the element 
+    // Retrieve the text property of the element
     return tempDivElement.textContent || tempDivElement.innerText || "";
 }
 
