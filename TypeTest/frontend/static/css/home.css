@@ -120,6 +120,35 @@ rvalue{
     font-size: xx-large;
 }
 
+#gameContainer{
+    width: 100vw;
+    min-height: 95vh;
+
+    overflow: auto;
+
+    max-width: 100%;
+    max-height: 100%;
+
+    border: none;
+    padding: none;
+    margin:  0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+#score{
+    font-size: x-large;
+}
+canvas {
+    border: 1px solid white;
+    width: 50vw;
+
+    padding: none;
+    margin: 1vw 0;
+}
+
 @keyframes pulse {
     0%, 100% {
         opacity: 0%;

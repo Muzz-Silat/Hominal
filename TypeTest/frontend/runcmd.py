@@ -10,3 +10,5 @@ def run(command):
                         return "0x0004"+simpleGenerator(int(command[2]))
                     except:
                          return command[2]+" is not a number"
+        case "snake":
+              return "0x0005"

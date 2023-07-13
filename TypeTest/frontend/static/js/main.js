@@ -24,6 +24,7 @@ input.focus();
 
 //all sub programs
 var typetest = new TypeTest(inputElement);
+var snake = new Snake(inputElement);
 
 //focuses the users caret onto the current input span (on document click).
 document.addEventListener('click', function(){input.focus()})
@@ -151,6 +152,10 @@ function inputResponse(inputVal) {
                 typetest.run(text.replace("0x0004", ""))
                 window.scrollTo(0, 0)
                 break;
+            case text.includes("0x0005"):
+                snake.run()
+                window.scrollTo(0, 0)
+                break;
             default:
                 console.log("running")
                 newline.create(text);
@@ -214,3 +219,4 @@ input.onkeydown = function(e){
 function print(text){
     console.log(text)
 }
+
