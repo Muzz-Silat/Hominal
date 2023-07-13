@@ -147,13 +147,13 @@ function Snake(terminalInput){
 
     this.exit = function() {
         that.div.remove()
-        terminalInput.style.display = ""
-        document.getElementById("input").focus()
-        that.startScroll()
+        this.returnToHome()
         hotkeys.deleteScope('snake');
     }
 
-    this.startScroll = function(){
+    this.returnToHome = function(){
+        terminalInput.style.display = ""
+        document.getElementById("input").focus()
         terminalInput.before(that.terminal)
         window.scrollTo(0, document.body.scrollHeight)
     }

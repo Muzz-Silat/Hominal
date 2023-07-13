@@ -11,4 +11,6 @@ def run(command):
                     except:
                          return command[2]+" is not a number"
         case "snake":
-              return "0x0005"
+            return "0x0005"
+        case "pong":
+            return "0x0006"

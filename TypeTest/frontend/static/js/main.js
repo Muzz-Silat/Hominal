@@ -25,6 +25,7 @@ input.focus();
 //all sub programs
 var typetest = new TypeTest(inputElement);
 var snake = new Snake(inputElement);
+var pong = new Pong(inputElement);
 
 //focuses the users caret onto the current input span (on document click).
 document.addEventListener('click', function(){input.focus()})
@@ -109,15 +110,15 @@ function inputResponse(inputVal) {
     .then(text => {
         console.log(text);
         switch(true){
-            case text.includes("0x0000"):
+            case text.includes("0x0000"): //empty newline on enter
                 text = "";
                 break;
-            case text.includes("0x0001"):
+            case text.includes("0x0001"): //clear
                 while(document.getElementsByClassName("line").length > 0){
                     document.getElementsByClassName("line")[0].remove()
                 }
                 break;
-            case text.includes("0x0002"):
+            case text.includes("0x0002"): //tag -n
                 text = text.replace("0x0002", "")
                 tagElementName.innerHTML = text+"@type-test"
                 tag = tagElement.innerHTML;
@@ -125,7 +126,7 @@ function inputResponse(inputVal) {
                 newline.create(text);
                 break;
 
-            case text.includes("0x0003"):
+            case text.includes("0x0003"): //tag -c
                 text = text.replace("0x0003", "");
                 if(text == "default"){
                     tagElementName.style.color = 'rgb(138,223,50)'
@@ -148,17 +149,25 @@ function inputResponse(inputVal) {
                 text = "color changed successfully! if this is untrue, please see help tag.";
                 newline.create(text);
                 break;
-            case text.includes("0x0004"):
+
+            case text.includes("0x0004"): //typetest
                 typetest.run(text.replace("0x0004", ""))
                 window.scrollTo(0, 0)
                 break;
-            case text.includes("0x0005"):
+
+            case text.includes("0x0005"): //snake
                 snake.run()
                 window.scrollTo(0, 0)
                 break;
-            default:
+
+            case text.includes("0x0006"): //pong
+                pong.run()
+                window.scrollTo(0, 0)
+                break;
+
+            default: //no match, response is formatted from backend
                 console.log("running")
-                newline.create(text);
+                newline.create(text, 0, true);
                 break;
         }
         if(document.getElementById("main") != null){
@@ -172,13 +181,21 @@ function inputResponse(inputVal) {
 function NewLine(){
     this.newline;
     let that = this;
-    this.create = function(text, time = 0){
+    this.create = function(text, time = 0, animate = false){
         setTimeout(function() {
             this.text = text;
             that.newline = document.createElement("span")
             that.newline.className = "line"
             that.newline.innerHTML = this.text;
+            if(animate){
+                that.newline.classList.add("typedBlock")
+            }
             mainContainer.appendChild(that.newline)
+            if(animate){
+                setTimeout(() => {
+                    document.getElementsByClassName("typedBlock")[0].classList.remove("typedBlock")
+                }, 1000);
+            }
         }, time);
     }
 }

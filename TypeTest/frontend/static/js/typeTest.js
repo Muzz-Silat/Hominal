@@ -154,9 +154,10 @@ function TypeTest(terminalInput){
                 )
             }
         })
+
         this.input.addEventListener("keydown", function(event){
             keysPressed[event.key] = true;
-            if(keysPressed['Control'] && event.key == 'c'){
+            if((keysPressed['Control'] || keysPressed['Meta']) && event.key == 'c'){
                 that.exit()
             }
         })
@@ -266,8 +267,10 @@ function TypeTest(terminalInput){
         }
     }
 
-    this.startScroll = function(){
+    this.returnToHome = function(){
         terminalInput.before(that.terminal)
+        terminalInput.style.display = ""
+        document.getElementById("input").focus()
         window.scrollTo(0, document.body.scrollHeight)
     }
 
@@ -283,6 +286,7 @@ function TypeTest(terminalInput){
             timeTaken = this.timer.innerText.replace("s", "")
             wpm = (numOfWords/timeTaken) * 60
             wpm = Math.round((wpm + Number.EPSILON))
+
             newline.create(
                 `
                     <result class="line typed topresult">
@@ -311,8 +315,6 @@ function TypeTest(terminalInput){
         }
 
         this.container.remove()
-        terminalInput.style.display = ""
-        document.getElementById("input").focus()
-        that.startScroll()
+        this.returnToHome()
     }
 }
