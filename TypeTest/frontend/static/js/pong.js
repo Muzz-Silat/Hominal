@@ -12,7 +12,9 @@ function Pong(terminalInput) {
 
     var container;
     var mainScreen;
-    
+
+    //boolean value that decides whether loop continues or not. false on exit true on run
+    let running;
 
     this.paddleSpeed = 6;
     this.ballSpeed = 5;
@@ -32,7 +34,7 @@ function Pong(terminalInput) {
       height: this.paddleHeight,
       dy: 0
     };
-  
+
     this.ball = {
       x: this.canvas.width / 2,
       y: this.canvas.height / 2,
@@ -49,6 +51,8 @@ function Pong(terminalInput) {
 
       //removing the main screen
       mainScreen.remove();
+
+      running = true;
 
       //creating the container and setting up game screen
       container = document.createElement("div");
@@ -75,7 +79,9 @@ function Pong(terminalInput) {
     };
 
     this.loop = function () {
-      requestAnimationFrame(this.loop.bind(this));
+      if(running){
+        requestAnimationFrame(this.loop.bind(this));
+      }
       this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
       this.leftPaddle.y += this.leftPaddle.dy;
@@ -201,6 +207,7 @@ function Pong(terminalInput) {
       if (e.which === 83 || e.which === 87) {
         that.leftPaddle.dy = 0;
       }
+
     };
 
     this.rightPaddleMove = function(up, down, stationary){
@@ -230,6 +237,8 @@ function Pong(terminalInput) {
         document.removeEventListener('keydown', this.handleKeyDown);
         document.removeEventListener('keyup', this.handleKeyUp);
         hotkeys.deleteScope("pong")
+
+        running = false;
 
         container.remove()
         this.returnToHome()
