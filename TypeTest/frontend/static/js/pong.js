@@ -12,10 +12,11 @@ function Pong(terminalInput) {
 
     var container;
     var mainScreen;
+    
 
     this.paddleSpeed = 6;
     this.ballSpeed = 5;
-
+  
     this.leftPaddle = {
       x: this.grid * 2,
       y: this.canvas.height / 2 - this.paddleHeight / 2,
@@ -192,12 +193,11 @@ function Pong(terminalInput) {
     this.initEventListeners = function () {
       document.addEventListener('keydown', this.handleKeyDown);
       document.addEventListener('keyup', this.handleKeyUp);
+      hotkeys('ctrl+c, cmd+c', 'pong', function(){
+        that.exit();
+      });
       hotkeys.setScope('pong')
     };
-
-    hotkeys('ctrl+c, cmd+c', 'pong', function(){
-        that.exit();
-    });
 
     this.exit = function(){
         //remove all event listeners

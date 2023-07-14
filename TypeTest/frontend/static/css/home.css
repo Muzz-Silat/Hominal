@@ -26,11 +26,6 @@ body {
     animation-fill-mode: forwards;
 }
 
-
-.Intro{
-    margin-top: 1%;
-}
-
 .line{
     display: block ;
     margin-top: 1%;
@@ -193,40 +188,11 @@ canvas {
     animation-fill-mode: forwards;
 }
 
-.typedBlock {
-    overflow: hidden;
-    white-space: nowrap;
-    animation: typings;
-    animation-duration: 0.2s;
-    animation-timing-function: linear;
-    animation-fill-mode: forwards;
-}
-
 @keyframes typing{
-    from { width: 0 }
+    from { width: 0; }
     to { width: 100% }
 }
 
-@keyframes typings{
-    0% {
-        transform: translateY(-100%);
-        opacity: 0;
-        font-size: 0;
-        -webkit-transform: translateY(-100%);
-        -moz-transform: translateY(-100%);
-        -ms-transform: translateY(-100%);
-        -o-transform: translateY(-100%);
-    }
-    100% {
-        transform: translateY(0);
-        font-size: 1em;
-        opacity: 1;
-        -webkit-transform: translateY(0);
-        -moz-transform: translateY(0);
-        -ms-transform: translateY(0);
-        -o-transform: translateY(0);
-    }
-}
 
 @keyframes fade-in{
     0% {

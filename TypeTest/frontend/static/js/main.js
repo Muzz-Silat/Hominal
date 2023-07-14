@@ -1,5 +1,6 @@
 //object that handles newlines
 var newline = new NewLine();
+newline.create("TypeTest [Version 1.01], All Rights Reserved.", 100, true)
 
 //tagElement refers to the span that contains the prompt tag.
 var tagElement = document.getElementById("tag")
@@ -11,6 +12,7 @@ let mainContainer = document.getElementById("main");
 
 //refers to the div that holds both the tag and input spans.
 var inputElement = document.getElementById("terminalInput")
+inputElement.style.display = "none" //hidden for sake of animation
 
 var current_command;
 var commands = [];
@@ -19,8 +21,11 @@ var commands = [];
 let input = document.getElementById("input");
 const commandList = ["help", "clear", "tag", "run"]
 
-//focuses on input on load.
-input.focus();
+//shows and focuses on input on load.
+setTimeout(() => {
+    inputElement.style.display = "block"
+    input.focus();
+}, 400);
 
 //all sub programs
 var typetest = new TypeTest(inputElement);
@@ -40,8 +45,8 @@ input.addEventListener("keydown", function(event){
         event.preventDefault();
     }
 })
-//handles the submission of the input
-input.addEventListener('keyup', function(event) {
+
+let submission = function(event) {
     event.preventDefault()
     let inputValue = convertToPlain(input.innerHTML);
     if(event.code === 'Tab' && inputValue.length > 0){
@@ -73,7 +78,7 @@ input.addEventListener('keyup', function(event) {
 
         //handing off input to the input handler
         inputResponse(inputValue)
-        newline.create(tag + input.innerHTML, 0, true);
+        newline.create(tag + input.innerHTML, 0);
         input.innerHTML = "";
 
         //this if statement helps filter out empty entries from the list of previous entries
@@ -92,7 +97,9 @@ input.addEventListener('keyup', function(event) {
         current_command += 1
         setCommandValue();
     }
-});
+}
+//handles the submission of the input
+input.addEventListener('keyup', submission)
 
 function setCommandValue(){
     if (commands[current_command] === undefined){
@@ -152,29 +159,23 @@ function inputResponse(inputVal) {
                 break;
 
             case text.includes("0x0004"): //typetest
-                setTimeout(() => {
-                    typetest.run(text.replace("0x0004", ""))
-                }, 250);
+                typetest.run(text.replace("0x0004", ""))
                 window.scrollTo(0, 0)
                 break;
 
             case text.includes("0x0005"): //snake
-                setTimeout(() => {
-                    snake.run()
-                }, 250);
+                snake.run()
                 window.scrollTo(0, 0)
                 break;
 
             case text.includes("0x0006"): //pong
-                setTimeout(() => {
-                    pong.run()
-                }, 250);
+                pong.run()
                 window.scrollTo(0, 0)
                 break;
 
             default: //no match, response is formatted from backend
                 console.log("running")
-                newline.create(text, 0, true);
+                newline.create(text, 0, true)
                 break;
         }
         if(document.getElementById("main") != null){
@@ -188,21 +189,47 @@ function inputResponse(inputVal) {
 function NewLine(){
     this.newline;
     let that = this;
+    let typeRate;
     this.create = function(text, time = 0, animate = false){
         setTimeout(function() {
             this.text = text;
             that.newline = document.createElement("span")
             that.newline.className = "line"
-            that.newline.innerHTML = this.text;
-            if(animate){
-                that.newline.classList.add("typedBlock")
-            }
             mainContainer.appendChild(that.newline)
-            setTimeout(() => {
-                while(document.getElementsByClassName("typedBlock")[0] != null){
-                        document.getElementsByClassName("typedBlock")[0].classList.remove("typedBlock")
+
+            if(animate){
+                console.log("animating")
+                //formatting the text so that there are no escaped characters
+                //this problem occurs when injecting the chars one by one
+                this.textarea = document.createElement('textarea');
+                this.textarea.innerHTML = this.text;
+                this.text = textarea.value
+
+                typeRate = 1;
+                //increases typeRate to 2 to keep stuff shorter in general.
+                if(this.text.length*10>1000){
+                    if(!this.text.length%2 == 0){
+                        this.text += " "
+                    }
+                    typeRate = 2
                 }
-            }, 200);
+
+                input.removeEventListener("keyup", submission)
+
+                let i = 0;
+                const typingInterval = setInterval(() => {
+                    if(i <= this.text.length) {
+                        that.newline.innerHTML = this.text.substr(0, typeRate*i);
+                        i+=typeRate;
+                    }else{
+                        input.addEventListener("keyup", submission)
+                        clearInterval(typingInterval);
+                    }
+                }, 10);
+            }else{
+                console.log("no animate")
+                that.newline.innerHTML = this.text
+            }
         }, time);
     }
 }
