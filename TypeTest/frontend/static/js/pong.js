@@ -195,16 +195,16 @@ function Pong(terminalInput) {
 
     //we use "that" here instead of func.bind(this) when setting eventlistener. this is because i am unaware of how to remove an eventlistener with a bound function.
     this.handleKeyDown = function (e) {
-      if (e.which === 87) {
+      if (e.which === 87 || e.which === 38) {
         that.leftPaddle.dy = -that.paddleSpeed;
-      } else if (e.which === 83) {
+      } else if (e.which === 83 || e.which == 40) {
         that.leftPaddle.dy = that.paddleSpeed;
       }
     };
 
     this.handleKeyUp = function (e) {
 
-      if (e.which === 83 || e.which === 87) {
+      if (e.which === 83 || e.which === 87 ||  e.which == 40 ||  e.which == 38) {
         that.leftPaddle.dy = 0;
       }
 
