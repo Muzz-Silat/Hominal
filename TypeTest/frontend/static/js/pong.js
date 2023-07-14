@@ -81,6 +81,7 @@ function Pong(terminalInput) {
       this.leftPaddle.y += this.leftPaddle.dy;
       this.rightPaddle.y += this.rightPaddle.dy;
 
+      //keeping paddles on screen
       if (this.leftPaddle.y < this.grid) {
         this.leftPaddle.y = this.grid;
       } else if (this.leftPaddle.y > this.maxPaddleY) {
@@ -123,6 +124,12 @@ function Pong(terminalInput) {
         !this.ball.resetting
       ) {
         this.ball.resetting = true;
+        if(this.ball.dx>0){
+            this.ball.dx = 5;
+        }
+        else{
+            this.ball.dx = -5;
+        }
   
         setTimeout(() => {
           this.ball.resetting = false;
@@ -134,9 +141,11 @@ function Pong(terminalInput) {
       if (this.collides(this.ball, this.leftPaddle)) {
         this.ball.dx *= -1;
         this.ball.x = this.leftPaddle.x + this.leftPaddle.width;
+        this.ball.dx*=1.05
       } else if (this.collides(this.ball, this.rightPaddle)) {
         this.ball.dx *= -1;
         this.ball.x = this.rightPaddle.x - this.ball.width;
+        this.ball.dx*=1.05
       }
   
       this.context.fillRect(
@@ -145,7 +154,7 @@ function Pong(terminalInput) {
         this.ball.width,
         this.ball.height
       );
-  
+
       this.context.fillStyle = 'lightgrey';
       this.context.fillRect(0, 0, this.canvas.width, this.grid);
       this.context.fillRect(
@@ -154,7 +163,7 @@ function Pong(terminalInput) {
         this.canvas.width,
         this.canvas.height
       );
-  
+
       for (let i = this.grid; i < this.canvas.height - this.grid; i += this.grid * 2) {
         this.context.fillRect(
           this.canvas.width / 2 - this.grid / 2,
@@ -163,16 +172,23 @@ function Pong(terminalInput) {
           this.grid
         );
       }
+
+      //autonomous controls. change the fraction in the last condition to change difficulty. 0-impossible 1-nothing
+      if((Math.sqrt((this.rightPaddle.y-this.ball.y)**2) != 0) &&(this.ball.dx > 0) && Math.random()>0.15){
+        if(this.ball.y > this.rightPaddle.y){
+            that.rightPaddleMove(false, true, false)
+        }else if(this.ball.dy < this.rightPaddle.y){
+            that.rightPaddleMove(true, false, false)
+        }else{
+            that.rightPaddleMove(false, false, true)
+        }
+      }else{
+        that.rightPaddleMove(false, false, true)
+      }
     };
 
     //we use "that" here instead of func.bind(this) when setting eventlistener. this is because i am unaware of how to remove an eventlistener with a bound function.
     this.handleKeyDown = function (e) {
-      if (e.which === 38) {
-        that.rightPaddle.dy = -that.paddleSpeed;
-      } else if (e.which === 40) {
-        that.rightPaddle.dy = that.paddleSpeed;
-      }
-
       if (e.which === 87) {
         that.leftPaddle.dy = -that.paddleSpeed;
       } else if (e.which === 83) {
@@ -181,14 +197,24 @@ function Pong(terminalInput) {
     };
 
     this.handleKeyUp = function (e) {
-      if (e.which === 38 || e.which === 40) {
-        that.rightPaddle.dy = 0;
-      }
 
       if (e.which === 83 || e.which === 87) {
         that.leftPaddle.dy = 0;
       }
     };
+
+    this.rightPaddleMove = function(up, down, stationary){
+        //move
+        if (up) {
+            that.rightPaddle.dy = -that.paddleSpeed;
+        }
+        else if(down) {
+            that.rightPaddle.dy = that.paddleSpeed;
+        }
+        else if (stationary) {
+            that.rightPaddle.dy = 0;
+        }
+    }
 
     this.initEventListeners = function () {
       document.addEventListener('keydown', this.handleKeyDown);
