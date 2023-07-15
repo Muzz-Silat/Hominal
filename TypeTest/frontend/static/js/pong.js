@@ -18,7 +18,7 @@ function Pong(terminalInput) {
 
     this.paddleSpeed = 6;
     this.ballSpeed = 5;
-  
+
     this.leftPaddle = {
       x: this.grid * 2,
       y: this.canvas.height / 2 - this.paddleHeight / 2,
@@ -26,7 +26,7 @@ function Pong(terminalInput) {
       height: this.paddleHeight,
       dy: 0
     };
-  
+
     this.rightPaddle = {
       x: this.canvas.width - this.grid * 3,
       y: this.canvas.height / 2 - this.paddleHeight / 2,
@@ -44,6 +44,10 @@ function Pong(terminalInput) {
       dx: this.ballSpeed,
       dy: -this.ballSpeed
     };
+
+    this.scoreBox = document.createElement("div")
+    this.scorePlayer = document.createElement("span")
+    this.scoreBot = document.createElement("span")
 
     this.run = function () {
       //init main screen
@@ -64,6 +68,23 @@ function Pong(terminalInput) {
 
       document.getElementById('gameContainer').appendChild(this.canvas);
       this.context = this.canvas.getContext('2d');
+
+      //draw score box
+      this.scoreBox.id = "score"
+      this.scoreBox.classList.add("pong")
+      this.canvas.before(this.scoreBox);
+
+      this.scorePlayer.id = "player"
+      this.scoreBox.appendChild(this.scorePlayer);
+      this.scorePlayer.innerHTML = 0
+
+      this.scoreBot.id = "bot"
+      this.scoreBox.appendChild(this.scoreBot);
+      this.scoreBot.innerHTML = 0
+
+      this.controls = document.createElement("div")
+      this.canvas.after(this.controls);
+      this.controls.innerHTML = "press: w,s/▲,▼ to move | ctrl-c to exit"
 
       this.initEventListeners();
       this.loop();
@@ -100,23 +121,26 @@ function Pong(terminalInput) {
         this.rightPaddle.y = this.maxPaddleY;
       }
   
-      this.context.fillStyle = 'white';
+      this.context.fillStyle = 'greenyellow';
+
       this.context.fillRect(
         this.leftPaddle.x,
         this.leftPaddle.y,
         this.leftPaddle.width,
         this.leftPaddle.height
       );
+
+      this.context.fillStyle = 'white';
       this.context.fillRect(
         this.rightPaddle.x,
         this.rightPaddle.y,
         this.rightPaddle.width,
         this.rightPaddle.height
       );
-  
+
       this.ball.x += this.ball.dx;
       this.ball.y += this.ball.dy;
-  
+
       if (this.ball.y < this.grid) {
         this.ball.y = this.grid;
         this.ball.dy *= -1;
@@ -124,17 +148,20 @@ function Pong(terminalInput) {
         this.ball.y = this.canvas.height - this.grid * 2;
         this.ball.dy *= -1;
       }
-  
+
       if (
         (this.ball.x < 0 || this.ball.x > this.canvas.width) &&
         !this.ball.resetting
       ) {
         this.ball.resetting = true;
+        this.paddleSpeed = 6
         if(this.ball.dx>0){
             this.ball.dx = 5;
+            this.scorePlayer.innerHTML = Number(this.scorePlayer.innerHTML) + 1;
         }
         else{
             this.ball.dx = -5;
+            this.scoreBot.innerHTML = Number(this.scoreBot.innerHTML) + 1;
         }
   
         setTimeout(() => {
@@ -147,11 +174,16 @@ function Pong(terminalInput) {
       if (this.collides(this.ball, this.leftPaddle)) {
         this.ball.dx *= -1;
         this.ball.x = this.leftPaddle.x + this.leftPaddle.width;
+
         this.ball.dx*=1.05
+        this.paddleSpeed*=1.025
+
       } else if (this.collides(this.ball, this.rightPaddle)) {
         this.ball.dx *= -1;
         this.ball.x = this.rightPaddle.x - this.ball.width;
+
         this.ball.dx*=1.05
+        this.paddleSpeed*=1.025
       }
   
       this.context.fillRect(
@@ -180,7 +212,7 @@ function Pong(terminalInput) {
       }
 
       //autonomous controls. change the fraction in the last condition to change difficulty. 0-impossible 1-nothing
-      if((Math.sqrt((this.rightPaddle.y-this.ball.y)**2) != 0) &&(this.ball.dx > 0) && Math.random()>0.15){
+      if((this.ball.y != this.rightPaddle.y) &&(this.ball.dx > 0) && Math.random()>0.25){
         if(this.ball.y > this.rightPaddle.y){
             that.rightPaddleMove(false, true, false)
         }else if(this.ball.dy < this.rightPaddle.y){
@@ -190,6 +222,14 @@ function Pong(terminalInput) {
         }
       }else{
         that.rightPaddleMove(false, false, true)
+      }
+
+      if(this.scoreBot.innerHTML==10 || this.scorePlayer.innerHTML==10){
+        if(this.scoreBot.innerHTML > this.scorePlayer.innerHTML){
+            this.exit(`You-${this.scorePlayer.innerHTML}, Robot-${this.scoreBot.innerHTML}. noob! `)
+        }else{
+            this.exit(`You-${this.scorePlayer.innerHTML}, Robot-${this.scoreBot.innerHTML}. good! `)
+        }
       }
     };
 
@@ -203,11 +243,9 @@ function Pong(terminalInput) {
     };
 
     this.handleKeyUp = function (e) {
-
       if (e.which === 83 || e.which === 87 ||  e.which == 40 ||  e.which == 38) {
         that.leftPaddle.dy = 0;
       }
-
     };
 
     this.rightPaddleMove = function(up, down, stationary){
@@ -232,23 +270,27 @@ function Pong(terminalInput) {
       hotkeys.setScope('pong')
     };
 
-    this.exit = function(){
+    this.exit = function(text = ""){
         //remove all event listeners
         document.removeEventListener('keydown', this.handleKeyDown);
         document.removeEventListener('keyup', this.handleKeyUp);
         hotkeys.deleteScope("pong")
+        this.scoreBox.classList.remove("pong")
 
         running = false;
 
         container.remove()
         this.returnToHome()
-        newline.create("you played: pong. there is no win condition right now :(")
+
+        if(text == ""){
+            newline.create("exited pong.", 300, true)
+        }else{
+            newline.create(text, 0, true)
+        }
     };
 
     this.returnToHome = function(){
-        terminalInput.style.display = ""
-        document.getElementById("input").focus()
         terminalInput.before(mainScreen)
         window.scrollTo(0, document.body.scrollHeight)
     }
-  }
+}

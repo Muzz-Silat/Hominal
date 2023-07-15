@@ -33,11 +33,6 @@ body {
 
 #terminalInput{
     margin-top: 1%;
-
-    animation: fade-in;
-    animation-duration: 0.8s;
-    animation-timing-function: linear;
-    animation-fill-mode: forwards;
 }
 #input:focus{
     border: none;
@@ -159,7 +154,14 @@ rvalue{
     flex-direction: column;
 }
 #score{
+    width: 10vw;
     font-size: x-large;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.pong{
+    justify-content: space-between!important;
 }
 canvas {
     border: 1px solid white;
@@ -167,6 +169,15 @@ canvas {
 
     padding: none;
     margin: 1vw 0;
+}
+
+#player{
+    display: flex;
+    color: greenyellow;
+}
+
+#bot{
+    display: flex;
 }
 
 @keyframes pulse {

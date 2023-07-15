@@ -173,7 +173,7 @@ function inputResponse(inputVal) {
                 window.scrollTo(0, 0)
                 break;
 
-            default: //no match, response is formatted from backend
+            default: //response is formatted from backend
                 console.log("running")
                 newline.create(text, 0, true)
                 break;
@@ -205,6 +205,24 @@ function NewLine(){
                 this.textarea.innerHTML = this.text;
                 this.text = textarea.value
 
+                //let spaces = this.text.split(/<br>| | /) .filter(str => str != "")
+                let breaks = this.text.split("<br>")
+
+                //ensure that the loop runs for an appropriate amount of time
+                let iterate = this.text.length
+
+                if(breaks.length > 1){
+                    iterate = iterate - breaks.length*2 //- (breaks.length*4) - nbsp.length
+                }
+
+                for(let j = 0; j<this.text.length; j++){
+                    if(this.text[j] == " "){
+                        iterate--
+                    }
+                }
+
+                console.log(this.text)
+
                 typeRate = 1;
                 //increases typeRate to 2 to keep stuff shorter in general.
                 if(this.text.length*10>1000){
@@ -215,14 +233,22 @@ function NewLine(){
                 }
 
                 input.removeEventListener("keyup", submission)
-
+                tagElement.style.display = "none"
                 let i = 0;
                 const typingInterval = setInterval(() => {
-                    if(i <= this.text.length) {
+                    if(i < iterate) {
                         that.newline.innerHTML = this.text.substr(0, typeRate*i);
-                        i+=typeRate;
+                        window.scrollTo(0, document.body.scrollHeight)
+                        i= i + typeRate;
+                        //console.log("running", i)
                     }else{
+                        console.log(this.text.length, i)
+                        console.log("starting")
                         input.addEventListener("keyup", submission)
+                        tagElement.style.display = "inline"
+                        inputElement.style.display = "block"
+                        input.focus()
+                        window.scrollTo(0, document.body.scrollHeight)
                         clearInterval(typingInterval);
                     }
                 }, 10);

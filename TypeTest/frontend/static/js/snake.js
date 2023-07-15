@@ -2,8 +2,11 @@ function Snake(terminalInput){
     let that = this;
 
     this.terminal = document.getElementById("main")
+    let running = false;
 
     this.run = function(){
+        this.initEventListeners() // default scope is 'all', we change it to snake so that only hotkeys defined in snake are used.
+
         that.terminal = document.getElementById("main")
         that.terminal.remove()
 
@@ -56,8 +59,7 @@ function Snake(terminalInput){
             y: 320
         };
 
-        hotkeys.setScope('snake'); // default scope is 'all', we change it to snake so that only hotkeys defined in snake are used.
-
+        running = true;
         requestAnimationFrame(that.loop);
     }
 
@@ -69,7 +71,9 @@ function Snake(terminalInput){
 
     // game loop
     this.loop = function() {
-      requestAnimationFrame(that.loop);
+      if(running){
+        requestAnimationFrame(that.loop.bind(that));
+      }
 
       // slow game loop to 15 fps instead of 60 (60/15 = 4)
       if (++that.count < 4) {
@@ -146,6 +150,7 @@ function Snake(terminalInput){
     }
 
     this.exit = function() {
+        running = false;
         that.div.remove()
         this.returnToHome()
         hotkeys.deleteScope('snake');
@@ -159,33 +164,37 @@ function Snake(terminalInput){
     }
 
     //unfortunately i do not have a better way of implementing capslock support
-    hotkeys('ctrl+c, cmd+c, a,s,d,w, a+s,a+w, w+a,w+d, s+a,s+d, d+w,d+s, capslock+a,capslock+s,capslock+d,capslock+w, capslock+a+s,capslock+a+w, capslock+w+a,capslock+w+d, capslock+s+a,capslock+s+d, capslock+d+w,capslock+d+s', 'snake', function(e, handler){
-        switch(true){
-            case hotkeys.isPressed(65) && that.snake.dx === 0:
-                //console.log("A");
-                that.snake.dx = -that.grid;
-                that.snake.dy = 0;
-            break;
-            case hotkeys.isPressed(87) && that.snake.dy === 0:
-                //console.log("W");
-                that.snake.dy = -that.grid;
-                that.snake.dx = 0;
-            break;
-            case hotkeys.isPressed(68) &&  that.snake.dx === 0:
-                //console.log("D");
-                that.snake.dx = that.grid;
-                that.snake.dy = 0;
-            break;
-            case hotkeys.isPressed(83) && that.snake.dy === 0:
-                //console.log("S");
-                that.snake.dy = that.grid;
-                that.snake.dx = 0;
-            break;
-        }
 
-        if(handler.key == 'ctrl+c' || handler.key == 'cmd+c'){
-            that.exit();
-        }
-        return false; //prevent default
-    });
+    this.initEventListeners = function () {
+        hotkeys('ctrl+c, cmd+c, a,s,d,w, a+s,a+w, w+a,w+d, s+a,s+d, d+w,d+s, capslock+a,capslock+s,capslock+d,capslock+w, capslock+a+s,capslock+a+w, capslock+w+a,capslock+w+d, capslock+s+a,capslock+s+d, capslock+d+w,capslock+d+s', 'snake', function(e, handler){
+            switch(true){
+                case hotkeys.isPressed(65) && that.snake.dx === 0:
+                    //console.log("A");
+                    that.snake.dx = -that.grid;
+                    that.snake.dy = 0;
+                break;
+                case hotkeys.isPressed(87) && that.snake.dy === 0:
+                    //console.log("W");
+                    that.snake.dy = -that.grid;
+                    that.snake.dx = 0;
+                break;
+                case hotkeys.isPressed(68) &&  that.snake.dx === 0:
+                    //console.log("D");
+                    that.snake.dx = that.grid;
+                    that.snake.dy = 0;
+                break;
+                case hotkeys.isPressed(83) && that.snake.dy === 0:
+                    //console.log("S");
+                    that.snake.dy = that.grid;
+                    that.snake.dx = 0;
+                break;
+            }
+    
+            if(handler.key == 'ctrl+c' || handler.key == 'cmd+c'){
+                that.exit();
+            }
+            return false; //prevent default
+        });
+        hotkeys.setScope('snake')
+      };
 }
