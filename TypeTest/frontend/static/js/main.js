@@ -1,6 +1,6 @@
 //object that handles newlines
 var newline = new NewLine();
-newline.create("TypeTest [Version 1.01], All Rights Reserved.", 100, true)
+newline.create("TypeTest [Version 1.01], All Rights Reserved. ", 100, true)
 
 //tagElement refers to the span that contains the prompt tag.
 var tagElement = document.getElementById("tag")
@@ -19,7 +19,7 @@ var commands = [];
 
 //refers to the input span.
 let input = document.getElementById("input");
-const commandList = ["help", "clear", "tag", "run"]
+const commandList = ["help","hello", "clear", "tag", "run"]
 
 //shows and focuses on input on load.
 setTimeout(() => {
@@ -31,6 +31,32 @@ setTimeout(() => {
 var typetest = new TypeTest(inputElement);
 var snake = new Snake(inputElement);
 var pong = new Pong(inputElement);
+
+// // var json = `
+// // [
+// //     {"help": ["", "clear", "tag", "run"],
+// //      "clear": ["", "-c"],
+// //      "tag": {"-c": [],"-n": []},
+// //      "run": ["typetest", "snake", "json"]}
+// // ]`
+
+// var json = `[
+//     {"help": ["", "clear", "tag", "run"]},
+//     {"clear": ["", "-c"]},
+//     {"tag": {
+//         "-c": [],
+//         "-n": []
+//     }},
+//     {"run": ["typetest", "snake", "json"]}
+// ]`
+// let jsondata = JSON.parse(json)
+// let helparr = Object.values(jsondata[0])
+// console.log(helparr.toString());
+
+var commands = [
+    ["help", "clear", "run", "tag"],
+    [["", "clear", "tag", "run"], ["","-c"], ["typetest", "snake", "pong"], ["-c", "-n"]]
+]
 
 //focuses the users caret onto the current input span (on document click).
 document.addEventListener('click', function(){input.focus()})
@@ -50,10 +76,19 @@ let submission = function(event) {
     event.preventDefault()
     let inputValue = convertToPlain(input.innerHTML);
     if(event.code === 'Tab' && inputValue.length > 0){
-        let subCommandList = commandList.filter(str => str.startsWith(inputValue))
-        console.log(subCommandList)
+        let subCommandList = commands[0].filter(str => str.startsWith(inputValue))
+        if (subCommandList.length > 1){
+            let newstr = "";
+            while(subCommandList.length > 0){
+                newstr += subCommandList[0] + " "
+                subCommandList.shift()
+            }
+            newline.create(tag + input.innerHTML, 0);
+            newline.create(newstr, 0)
+        }
         switch (true){
             case subCommandList[0] == "clear":
+                console.log("")
                 input.innerText = "clear"
                 setCarat(input)
                 break;

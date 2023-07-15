@@ -5,8 +5,8 @@ body {
     color: #ffffff;
     padding-left: 1%;
     padding-right: 1%;
+    min-height: 100%;
 }
-
 #main{
     animation: fade-in;
     animation-duration: 0.8s;
@@ -41,6 +41,7 @@ body {
 }
 
 html{
+    min-height: 100%;
     overflow: overlay;
 }
 ::-webkit-scrollbar {
@@ -136,21 +137,16 @@ rvalue{
 }
 
 #gameContainer{
-    width: 100vw;
-    min-height: 95vh;
-
-    overflow: auto;
-
-    max-width: 100%;
-    max-height: 100%;
+    width: 85vh;
+    height: 85vh;
 
     border: none;
     padding: none;
-    margin:  0;
+    margin: auto auto;
 
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     flex-direction: column;
 }
 #score{
@@ -165,7 +161,7 @@ rvalue{
 }
 canvas {
     border: 1px solid white;
-    width: 50vw;
+    width: inherit;
 
     padding: none;
     margin: 1vw 0;
