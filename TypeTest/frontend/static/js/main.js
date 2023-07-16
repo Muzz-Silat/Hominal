@@ -65,7 +65,7 @@ let displayCommand = function(possibleCommands, shiftThrough){
         if(shiftCommandIndex>possibleCommands.length-2){shiftCommandIndex=0}
         else{shiftCommandIndex++}
         console.log(possibleCommands)
-        input.innerHTML = previousInput+ " "+ possibleCommands[shiftCommandIndex]
+        input.innerHTML = typedCommand + " " + possibleCommands[shiftCommandIndex]
         console.log(shiftCommandIndex)
     }
     else if(possibleCommands.length == 1){
@@ -78,76 +78,80 @@ let filterCommands = function(string){
     return commands[commandRow][commandCol].filter(str => str.startsWith(string))
 }
 
-let possibleCommands;
+let possibleCommands = commands[0][0];
 let submission = function(event) {
     event.preventDefault()
     let inputValue = convertToPlain(input.innerHTML);
 
     console.log(event.code)
     if(event.code === 'AltRight'){
-        displayCommand(commands[commandRow][commandCol], true)
+        displayCommand(possibleCommands, true)
     }
 
     if(event.code === 'Tab'){
         console.log("row: "+commandRow)
         console.log("col: "+commandCol)
         console.log("possibleC: "+possibleCommands)
+        typedCommand = ''
 
         let userInput = inputValue.split(" ").filter(str => str != "");
         for(let i = 0; i < userInput.length; i++){
             userInput[i] = userInput[i].trim()
         }
         console.log(userInput)
+
         if(userInput.length > 0){
-            if(userInput.length > 0){
-                commandRow = 0;
-                commandCol = 0;
-                let commandIncomplete = false; //assumed as false unless first if statement below fails at the last point.
-                console.log("running this function")
-                for(let i = 0; i < userInput.length; i++){
-                    console.log("running for: "+userInput[i])
-                    if(filterCommands(userInput[i]).length == 1){
-                        let currArray = commands[commandRow][commandCol]
-                        for(let j = 0; j < currArray.length; j++){
-                            console.log("running if statement")
-                            if(currArray[j] == userInput[i]){
-                                console.log(j)
-                                commandCol = j;
-                                commandRow++
-                                j = currArray.length;
-                            }
-                            //to find out whether the last command in the string is completed/valid
+            commandRow = 0;
+            commandCol = 0;
+            let commandIncomplete = false; //assumed as false unless first if statement below fails at the last point.
+            console.log("running this function")
+            for(let i = 0; i < userInput.length; i++){
+                console.log("running for: "+userInput[i])
+                if(filterCommands(userInput[i]).length == 1){
+                    let currArray = commands[commandRow][commandCol]
+                    for(let j = 0; j < currArray.length; j++){
+                        console.log("running if statement")
+                        console.log(currArray[j], userInput[i])
+                        if(currArray[j] == userInput[i]){
+                            console.log(j)
+                            commandCol = j;
+                            commandRow++
+                            j = currArray.length;
+                            commandIncomplete = false;
+                        }else if(i == userInput.length-1){
+                            commandIncomplete = true;
+                            console.log("incomplete")
                         }
-                    }
-                    else if(i == userInput.length-1){
-                        commandIncomplete = true;
-                        console.log("incomplete")
-                    }
-                    //if statements fail in unexpected way, commands are likely invalid and hence gibberish
-                    else{
-                        console.log("gibberish entered"+ userInput[i]+5)
-                        i = userInput.length
-                        commandCol = 0;
-                        commandRow = 0;
+                        //to find out whether the last command in the string is completed/valid
                     }
                 }
-                previousInput = userInput
-                //at this point, we will have traced the users input to its command string.
-                //we can now determine whether this input is valid, and where it can go from here.
-                //if valid, commandRow will have a value greater than 0.
-                if(commandIncomplete){
-                    possibleCommands = filterCommands(userInput[userInput.length-1]);
-                    console.log(possibleCommands)
-                    //displayCommand(possibleCommands, false)
-                }else if(!commandIncomplete){
-                    try{
-                        possibleCommands = commands[commandRow][commandCol]
-                        if(possibleCommands.length == 1 && possibleCommands[0] == "."){
-                            possibleCommands = []
-                        }
-                    }catch(e){
-                        console.log("no more rows exist")
+                else if(i == userInput.length-1){
+                    commandIncomplete = true;
+                    console.log("incomplete")
+                }
+                //if statements fail in unexpected way, commands are likely invalid and hence gibberish
+                else{
+                    console.log("gibberish entered"+ userInput[i]+5)
+                    i = userInput.length
+                    commandCol = 0;
+                    commandRow = 0;
+                }
+            }
+            //at this point, we will have traced the users input to its command string.
+            //we can now determine whether this input is valid, and where it can go from here.
+            //if valid, commandRow will have a value greater than 0.
+            if(commandIncomplete){
+                possibleCommands = filterCommands(userInput[userInput.length-1]);
+                console.log(possibleCommands)
+            }else if(!commandIncomplete){
+                typedCommand = userInput
+                try{
+                    possibleCommands = commands[commandRow][commandCol]
+                    if(possibleCommands.length == 1 && possibleCommands[0] == "."){
+                        possibleCommands = []
                     }
+                }catch(e){
+                    console.log("no more rows exist")
                 }
             }
         }
@@ -162,7 +166,7 @@ let submission = function(event) {
                 stringPossibleCommands += str.replace(".", "")+" "
             }
         }catch(e){
-            stringPossibleCommands = "no available commands for '"+inputValue+"'"
+            stringPossibleCommands = inputValue+"*"
         }
 
         //handles printing of the possible commands to the terminal
@@ -181,6 +185,7 @@ let submission = function(event) {
         }
     }
     if (event.code === 'Enter'){
+        typedCommand = ''
         //formatting the users input, i.e. sanitising input.
         inputValue = inputValue.replace("/", "")
         console.log("isolated input: " + inputValue)
