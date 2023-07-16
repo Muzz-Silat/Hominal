@@ -224,12 +224,36 @@ function Pong(terminalInput) {
         that.rightPaddleMove(false, false, true)
       }
 
-      if(this.scoreBot.innerHTML==10 || this.scorePlayer.innerHTML==10){
-        if(this.scoreBot.innerHTML > this.scorePlayer.innerHTML){
-            this.exit(`You-${this.scorePlayer.innerHTML}, Robot-${this.scoreBot.innerHTML}. noob! `)
-        }else{
-            this.exit(`You-${this.scorePlayer.innerHTML}, Robot-${this.scoreBot.innerHTML}. good! `)
-        }
+      if(this.scoreBot.innerHTML==10){
+        let i = 0;
+        let interval = setInterval(() => {
+            i+=1
+            this.context.fillStyle = `rgba(102, 146, 199,${(i/100)*1})`;
+            this.context.font = "2em monospace";
+            this.context.fillText("nice try loser", this.canvas.width/+50, this.canvas.height/2+100)
+            if(i>=200){
+                clearInterval(interval);
+            }
+        }, 10);
+        running=false;
+        setTimeout(() => {
+            this.exit(`${this.scoreBot.innerHTML}-<p>${this.scorePlayer.innerHTML}</p> to the bot... noob! `)
+        }, 1000);
+       }else if(this.scorePlayer.innerHTML==10){
+        let i = 0;
+        let interval = setInterval(() => {
+            i+=1
+            this.context.fillStyle = `rgba(177, 255, 55,${(i/100)*1})`;
+            this.context.font = "2em monospace";
+            this.context.fillText("winner, winner!", this.canvas.width/+50, this.canvas.height/2+100);
+            if(i>=200){
+                clearInterval(interval);
+            }
+        }, 10);
+        running=false;
+        setTimeout(() => {
+            this.exit(`<p>${this.scorePlayer.innerHTML}</p>-${this.scoreBot.innerHTML} against the bot. good! `)
+        }, 1000);
       }
     };
 

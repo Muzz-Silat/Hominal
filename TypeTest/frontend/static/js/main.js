@@ -14,9 +14,6 @@ let mainContainer = document.getElementById("main");
 var inputElement = document.getElementById("terminalInput")
 inputElement.style.display = "none" //hidden for sake of animation
 
-var current_command;
-var commands = [];
-
 //refers to the input span.
 let input = document.getElementById("input");
 const commandList = ["help","hello", "clear", "tag", "run"]
@@ -32,32 +29,6 @@ var typetest = new TypeTest(inputElement);
 var snake = new Snake(inputElement);
 var pong = new Pong(inputElement);
 
-// // var json = `
-// // [
-// //     {"help": ["", "clear", "tag", "run"],
-// //      "clear": ["", "-c"],
-// //      "tag": {"-c": [],"-n": []},
-// //      "run": ["typetest", "snake", "json"]}
-// // ]`
-
-// var json = `[
-//     {"help": ["", "clear", "tag", "run"]},
-//     {"clear": ["", "-c"]},
-//     {"tag": {
-//         "-c": [],
-//         "-n": []
-//     }},
-//     {"run": ["typetest", "snake", "json"]}
-// ]`
-// let jsondata = JSON.parse(json)
-// let helparr = Object.values(jsondata[0])
-// console.log(helparr.toString());
-
-var commands = [
-    ["help", "clear", "run", "tag"],
-    [["", "clear", "tag", "run"], ["","-c"], ["typetest", "snake", "pong"], ["-c", "-n"]]
-]
-
 //focuses the users caret onto the current input span (on document click).
 document.addEventListener('click', function(){input.focus()})
 input.addEventListener("keydown", function(event){
@@ -72,38 +43,141 @@ input.addEventListener("keydown", function(event){
     }
 })
 
+var commands = [
+    [["help", "clear", "run", "tag", "hellomyguy"]],
+    [[".", "clear.", "tag.", "run."], ["","-c"], ["typetest", "snake", "pong"], ["-c", "-n"]]
+]
+//will store the currently typed command.
+//will reset when last index of it contains a "."
+let typedCommand = ""
+
+//the command traversal coordinates
+let commandRow = 0;
+let commandCol = 0;
+let shiftCommandIndex = 0;
+let previousInput = "";
+
+//runs every time 'tab' is pressed. will only match it's the only possibility.
+//alternatively, it will cycle through the list of possible commands if 'shift+tab' is pressed.
+let displayCommand = function(possibleCommands, shiftThrough){
+    let shiftCommands = []
+    if(shiftThrough){
+        if(shiftCommandIndex>possibleCommands.length-2){shiftCommandIndex=0}
+        else{shiftCommandIndex++}
+        console.log(possibleCommands)
+        input.innerHTML = previousInput+ " "+ possibleCommands[shiftCommandIndex]
+        console.log(shiftCommandIndex)
+    }
+    else if(possibleCommands.length == 1){
+        input.innerText = possibleCommands[0]
+    }
+    setCarat(input)
+}
+
+let filterCommands = function(string){
+    return commands[commandRow][commandCol].filter(str => str.startsWith(string))
+}
+
+let possibleCommands;
 let submission = function(event) {
     event.preventDefault()
     let inputValue = convertToPlain(input.innerHTML);
-    if(event.code === 'Tab' && inputValue.length > 0){
-        let subCommandList = commands[0].filter(str => str.startsWith(inputValue))
-        if (subCommandList.length > 1){
-            let newstr = "";
-            while(subCommandList.length > 0){
-                newstr += subCommandList[0] + " "
-                subCommandList.shift()
-            }
-            newline.create(tag + input.innerHTML, 0);
-            newline.create(newstr, 0)
+
+    console.log(event.code)
+    if(event.code === 'AltRight'){
+        displayCommand(commands[commandRow][commandCol], true)
+    }
+
+    if(event.code === 'Tab'){
+        console.log("row: "+commandRow)
+        console.log("col: "+commandCol)
+        console.log("possibleC: "+possibleCommands)
+
+        let userInput = inputValue.split(" ").filter(str => str != "");
+        for(let i = 0; i < userInput.length; i++){
+            userInput[i] = userInput[i].trim()
         }
-        switch (true){
-            case subCommandList[0] == "clear":
-                console.log("")
-                input.innerText = "clear"
-                setCarat(input)
-                break;
-            case subCommandList[0] == "help":
-                input.innerText = "help"
-                setCarat(input)
-                break;
-            case subCommandList[0] == "run":
-                input.innerText = "run"
-                setCarat(input)
-                break;
-            case subCommandList[0] == "tag":
-                input.innerText = "tag"
-                setCarat(input)
-                break;
+        console.log(userInput)
+        if(userInput.length > 0){
+            if(userInput.length > 0){
+                commandRow = 0;
+                commandCol = 0;
+                let commandIncomplete = false; //assumed as false unless first if statement below fails at the last point.
+                console.log("running this function")
+                for(let i = 0; i < userInput.length; i++){
+                    console.log("running for: "+userInput[i])
+                    if(filterCommands(userInput[i]).length == 1){
+                        let currArray = commands[commandRow][commandCol]
+                        for(let j = 0; j < currArray.length; j++){
+                            console.log("running if statement")
+                            if(currArray[j] == userInput[i]){
+                                console.log(j)
+                                commandCol = j;
+                                commandRow++
+                                j = currArray.length;
+                            }
+                            //to find out whether the last command in the string is completed/valid
+                        }
+                    }
+                    else if(i == userInput.length-1){
+                        commandIncomplete = true;
+                        console.log("incomplete")
+                    }
+                    //if statements fail in unexpected way, commands are likely invalid and hence gibberish
+                    else{
+                        console.log("gibberish entered"+ userInput[i]+5)
+                        i = userInput.length
+                        commandCol = 0;
+                        commandRow = 0;
+                    }
+                }
+                previousInput = userInput
+                //at this point, we will have traced the users input to its command string.
+                //we can now determine whether this input is valid, and where it can go from here.
+                //if valid, commandRow will have a value greater than 0.
+                if(commandIncomplete){
+                    possibleCommands = filterCommands(userInput[userInput.length-1]);
+                    console.log(possibleCommands)
+                    //displayCommand(possibleCommands, false)
+                }else if(!commandIncomplete){
+                    try{
+                        possibleCommands = commands[commandRow][commandCol]
+                        if(possibleCommands.length == 1 && possibleCommands[0] == "."){
+                            possibleCommands = []
+                        }
+                    }catch(e){
+                        console.log("no more rows exist")
+                    }
+                }
+            }
+        }
+        //when tab is pressed but input is empty, meaning that user wants to see available commands
+        else{
+            possibleCommands = commands[commandRow][commandCol];
+        }
+
+        let stringPossibleCommands = ""
+        try{
+            for(str of possibleCommands){
+                stringPossibleCommands += str.replace(".", "")+" "
+            }
+        }catch(e){
+            stringPossibleCommands = "no available commands for '"+inputValue+"'"
+        }
+
+        //handles printing of the possible commands to the terminal
+        //also prevents printing out the same thing over an over
+        try{
+            if(document.getElementsByClassName("line")[document.getElementsByClassName("line").length-1].innerHTML != stringPossibleCommands){
+                newline.create(tag + input.innerHTML, 0);
+                newline.create(stringPossibleCommands, 0)
+            }
+            else{
+
+            }
+        }catch(e){
+            newline.create(tag + input.innerHTML, 0);
+            newline.create(stringPossibleCommands, 0)
         }
     }
     if (event.code === 'Enter'){
@@ -160,7 +234,6 @@ function inputResponse(inputVal) {
                     document.getElementsByClassName("line")[0].remove()
                 }
                 break;
-
             case text.includes("0x0002"): //tag -n
                 text = text.replace("0x0002", "")
                 tagElementName.innerHTML = text+"@type-test"
@@ -168,7 +241,6 @@ function inputResponse(inputVal) {
                 text = "name successfully changed to: " + text;
                 newline.create(text);
                 break;
-
             case text.includes("0x0003"): //tag -c
                 text = text.replace("0x0003", "");
                 if(text == "default"){
