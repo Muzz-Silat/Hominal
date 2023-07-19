@@ -49,6 +49,9 @@ html{
     min-height: 100%;
     overflow: overlay;
 }
+.highlight{
+    color: rgb(102, 146, 199);
+}
 ::-webkit-scrollbar {
     width: 17px;
 }

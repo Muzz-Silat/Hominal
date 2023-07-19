@@ -50,6 +50,17 @@ function Pong(terminalInput) {
     this.scoreBot = document.createElement("span")
 
     this.run = function () {
+      //resetting some of the variables for certain objects
+      Object.assign(this.leftPaddle, {
+        x: this.grid * 2,
+        y: this.canvas.height / 2 - this.paddleHeight / 2,
+      })
+
+      Object.assign(this.leftPaddle, {
+        x: this.grid * 2,
+        y: this.canvas.height / 2 - this.paddleHeight / 2,
+      })
+
       //init main screen
       mainScreen = document.getElementById("main");
 
@@ -316,5 +327,9 @@ function Pong(terminalInput) {
     this.returnToHome = function(){
         terminalInput.before(mainScreen)
         window.scrollTo(0, document.body.scrollHeight)
+        console.log(pong)
+        pong = null;
+        console.log(pong)
+
     }
 }

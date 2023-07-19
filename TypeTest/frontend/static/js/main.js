@@ -46,7 +46,6 @@ input.addEventListener("keydown", function(event){
 var current_command;
 var commandsHistory = [];
 
-let empty = [""]
 var commands = [
     [["clear", "help", "run", "set", "tag", "hingus"]],
     [["-c"], ["clear", "tag", "run"], ["pong", "snake", "typetest"], ["pong", "snake", "typetest"], ["-c", "-n"], ["hingusTest"]],
@@ -157,7 +156,7 @@ let autoFill = function(possibleCommands){
 let printPossibleCommands = function(){
     let stringPossibleCommands = ""
     try{
-        for(str of possibleCommands){
+        for(let str of possibleCommands){
             stringPossibleCommands += str.replace(".", "")+" "
         }
     }catch(e){

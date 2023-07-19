@@ -161,6 +161,7 @@ function Snake(terminalInput){
         document.getElementById("input").focus()
         terminalInput.before(that.terminal)
         window.scrollTo(0, document.body.scrollHeight)
+        snake = null;
     }
 
     //unfortunately i do not have a better way of implementing capslock support
