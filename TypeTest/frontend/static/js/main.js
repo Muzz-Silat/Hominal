@@ -6,6 +6,29 @@ newline.create("Hominal [Version 1.01], All Rights Reserved. ", 100, true)
 var tagElement = document.getElementById("tag")
 var tagElementName = document.getElementById("tag-name")
 var tag = tagElement.innerHTML
+var tagName = tagElementName.innerText
+var tagColor = tagElementName.style.color
+
+if (typeof(Storage) !== "undefined") {
+    // Code for localStorage/sessionStorage.
+    if (localStorage.length == 0){
+        console.log("running for the first time")
+        localStorage.setItem("tagName", tagName)
+        localStorage.setItem("tagColor", tagColor)
+    };
+    //sets the name
+    tagElementName.innerText = localStorage.getItem("tagName");
+    console.log(tagElement)
+    //sets the color
+    tagColor = localStorage.getItem("tagColor")
+    tagElementName.style.color = tagColor;
+
+    //sets the combination and ensures everything initializes correctly
+    tag = tagElement.innerHTML
+ } else {
+    // Sorry! No Web Storage support..
+    alert("Your browser does not support Web Storage. All changes in this session will be lost on refresh.");
+}
 
 //main element container for terminal
 let mainContainer = document.getElementById("main");
@@ -305,29 +328,32 @@ function inputResponse(inputVal) {
                 break;
             case text.includes("0x0002"): //tag -n
                 text = text.replace("0x0002", "")
-                tagElementName.innerHTML = text+"@type-test"
+                tagElementName.innerHTML = text+"@hominal"
+                setLocalvar("tagName", tagElementName.innerText);
                 tag = tagElement.innerHTML;
+
                 text = "name successfully changed to: " + text;
                 newline.create(text);
                 break;
             case text.includes("0x0003"): //tag -c
                 text = text.replace("0x0003", "");
                 if(text == "default"){
-                    tagElementName.style.color = 'rgb(138,223,50)'
+                    setLocalvar("tagColor", "yellowgreen")
                     tag = tagElement.innerHTML;
                 }
                 else if(text.includes("hex(")){
                     text = text.replace("hex(", "").replace(")", "")
-                    tagElementName.style.color = `#${text}`
+                    setLocalvar("tagColor", `#${text}`)
 
                 }
                 else if(text.includes("rgb(")){
                     text = text.replace("rgb(", "").replace(")", "")
-                    tagElementName.style.color = `rgb(${text})`
+                    setLocalvar("tagColor", `rgb(${text})`)
                 }
                 else{
-                    tagElementName.style.color = text
+                    setLocalvar("tagColor", text)
                 }
+                tagElementName.style.color = getLocalvar("tagColor")
                 tag = tagElement.innerHTML;
 
                 text = "color changed successfully! if this is untrue, please see help tag.";
@@ -472,3 +498,21 @@ function print(text){
     console.log(text)
 }
 
+
+function setLocalvar(type, value){
+    if (typeof(Storage) !== "undefined") {
+        localStorage.setItem(type, value)
+    } else {
+        window[type] = value;
+    }
+    return value
+}
+
+function getLocalvar(type){
+    if (typeof(Storage) !== "undefined") {
+        return localStorage.getItem(type);
+
+    } else {
+        return window[type];
+    }
+}

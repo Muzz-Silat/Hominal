@@ -29,7 +29,7 @@ def commands(request, command = None):
         case "run":
             return HttpResponse(run(keywords))
         case None:
-            #all codes are handled thorugh js on forntend
+            #all codes are handled through js on frontend
             return HttpResponse("0x0000")
         case _:
             return HttpResponse("\'{}\' is not recognized as an internal or external command,operable program or batch file.".format(command))

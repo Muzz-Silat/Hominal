@@ -106,7 +106,7 @@ def help(specify):
             case "run":
                 array1 = [
                         indentC+"NAME",
-                        indentC+indentS+"run - command used to start a program.", 
+                        indentC+indentS+"run - command used to start a program.",
                         br,
                         indentC+"COMMAND",
                         indentC+indentS+"run, immediate parameter: [program name] is required.",
