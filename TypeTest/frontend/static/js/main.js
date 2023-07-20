@@ -1,6 +1,6 @@
 //object that handles newlines
 var newline = new NewLine();
-newline.create("TypeTest [Version 1.01], All Rights Reserved. ", 100, true)
+newline.create("Hominal [Version 1.01], All Rights Reserved. ", 100, true)
 
 //tagElement refers to the span that contains the prompt tag.
 var tagElement = document.getElementById("tag")
