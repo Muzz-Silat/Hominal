@@ -9,12 +9,18 @@ var tag = tagElement.innerHTML
 var tagName = tagElementName.innerText
 var tagColor = tagElementName.style.color
 
+
+var current_command;
+var commandsHistory = [];
+
+
 if (typeof(Storage) !== "undefined") {
     // Code for localStorage/sessionStorage.
     if (localStorage.length == 0){
         console.log("running for the first time")
         localStorage.setItem("tagName", tagName)
         localStorage.setItem("tagColor", tagColor)
+        localStorage.setItem("commandsHistory", [])
     };
     //sets the name
     tagElementName.innerText = localStorage.getItem("tagName");
@@ -25,6 +31,8 @@ if (typeof(Storage) !== "undefined") {
 
     //sets the combination and ensures everything initializes correctly
     tag = tagElement.innerHTML
+    commandsHistory = getLocalvar("commandsHistory").split("…").filter(str => str != "")
+    current_command = commandsHistory.length;
  } else {
     // Sorry! No Web Storage support..
     alert("Your browser does not support Web Storage. All changes in this session will be lost on refresh.");
@@ -66,12 +74,9 @@ input.addEventListener("keydown", function(event){
     }
 })
 
-var current_command;
-var commandsHistory = [];
-
 var commands = [
     [["clear", "help", "run", "set", "tag", "hingus"]],
-    [["-c"], ["clear", "tag", "run"], ["pong", "snake", "typetest"], ["pong", "snake", "typetest"], ["-c", "-n"], ["hingusTest"]],
+    [["-a", "-h"], ["clear", "tag", "run"], ["pong", "snake", "typetest"], ["pong", "snake", "typetest"], ["-c", "-n"], ["hingusTest"]],
 ]
 
 
@@ -195,7 +200,7 @@ let printPossibleCommands = function(){
 
             let tempArray = stringPossibleCommands.split(" ");
             tempArray[0] = "<span class='highlight'>"+tempArray[0]+"</span>"
-            newline.create(tempArray.join(" "), 0)
+            newline.create(tempArray.join(" "), 0) 
 
         }
         else{
@@ -221,7 +226,7 @@ let printPossibleCommands = function(){
     }catch(e){
         console.log(e)
         newline.create(tag + input.innerHTML, 0);
-        newline.create(stringPossibleCommands, 0)
+        newline.create(stringPossibleCommands, 0);
     }
 }
 
@@ -259,7 +264,7 @@ let submission = function(event) {
     if(event.code === 'Tab'){
         commandDictionary(inputValue); //to set rows
         printPossibleCommands()
-        autoFill(possibleCommands)
+        autoFill(possibleCommands) 
     }
     if(event.code === 'Backspace'){
         commandDictionary(inputValue); //to set rows
@@ -284,6 +289,11 @@ let submission = function(event) {
         //this if statement helps filter out empty entries from the list of previous entries
         if(inputValue.replace(" ", "")!=""){
             commandsHistory.push(inputValue)
+            let commandsHistoryTemp = "";
+            for(let i = 0; i < commandsHistory.length; i++){
+                commandsHistoryTemp += commandsHistory[i] + "…"   
+            }
+            setLocalvar("commandsHistory", commandsHistoryTemp)
         }
         current_command = commandsHistory.length;
     }
@@ -301,13 +311,14 @@ let submission = function(event) {
 //handles the submission of the input
 input.addEventListener('keyup', submission)
 
-
 function setCommandValue(){
     if (commandsHistory[current_command] === undefined){
         input.innerHTML = ""
     }
     else {
+        console.log(commandsHistory)
         input.innerHTML = commandsHistory[current_command]
+        
     }
     setCarat(input)
 }
@@ -322,10 +333,28 @@ function inputResponse(inputVal) {
                 text = "";
                 break;
             case text.includes("0x0001"): //clear
-                while(document.getElementsByClassName("line").length > 0){
-                    document.getElementsByClassName("line")[0].remove()
+                if(text == "0x0001"){
+                    while(document.getElementsByClassName("line").length > 0){
+                        document.getElementsByClassName("line")[0].remove()
+                    }
+                    break; 
                 }
-                break;
+                else{
+                    if(text.includes("-a")){
+                        commandsHistory = []
+                        setLocalvar("commandsHistory", [])
+                        while(document.getElementsByClassName("line").length > 0){
+                            document.getElementsByClassName("line")[0].remove()
+                        }
+                        break; 
+                    }
+                    else if(text.includes("-h")){
+                        commandsHistory = []
+                        setLocalvar("commandsHistory", [])
+                        break;
+                    }
+                    break;
+                }
             case text.includes("0x0002"): //tag -n
                 text = text.replace("0x0002", "")
                 tagElementName.innerHTML = text+"@hominal"
@@ -389,11 +418,22 @@ function inputResponse(inputVal) {
     });
 }
 
+// scrolling to bottom of page
+let bodyHeight = document.body.scrollHeight
+let scroll = setInterval(function(){
+    let currentHeight = document.body.scrollHeight
+    if(currentHeight != bodyHeight){
+        bodyHeight = currentHeight
+        window.scrollTo(0, bodyHeight)   
+    }
+},10);
+
 //this cosntructor should build spans that make up the terminal history
 function NewLine(){
     this.newline;
     let that = this;
     let typeRate;
+    let input = document.getElementById("input");
     this.create = function(text, time = 0, animate = false){
         setTimeout(function() {
             this.text = text;
@@ -491,7 +531,7 @@ input.onkeydown = function(e){
             e.returnValue = false;
         }
     }
-    window.scrollTo(0, document.body.scrollHeight)
+    // window.scrollTo(0, document.body.scrollHeight)
 };
 
 function print(text){

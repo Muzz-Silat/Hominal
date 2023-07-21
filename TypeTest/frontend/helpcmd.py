@@ -41,7 +41,7 @@ def help(specify):
         ]
 
         commands = [
-            "clear/" + "[-c]"+br,
+            "clear/" + "[-a]"+br,
 
             "help/" + "[command]"+br,
 

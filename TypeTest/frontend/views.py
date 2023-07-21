@@ -23,6 +23,11 @@ def commands(request, command = None):
         case "help":
             return HttpResponse(help(keywords))
         case "clear":
+            if(len(keywords) > 1):
+                if(keywords[1] == "-a"):
+                    return HttpResponse("0x0001-a")  
+                elif(keywords[1] == "-h"):
+                    return HttpResponse("0x0001-h")  
             return HttpResponse("0x0001")
         case "tag":
             return HttpResponse(tag(keywords))
