@@ -4,9 +4,12 @@ list of stuff to get done:
 - fix typetest for higher values
 - add breakout game
 - add tetris
-- split main js file into multiple component js files
 - redefine help
 - pong singleplayer/multiplayer option
 - add set command functionality
 - change app name to hominal
+
 - change to javascript based framework
+    look into getting node.js
+
+-figure out what stops last character from being displayed on responses sometimes

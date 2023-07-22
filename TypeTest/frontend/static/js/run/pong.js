@@ -1,9 +1,9 @@
 function Pong(terminalInput) {
     let that = this;
     this.canvas = document.createElement('canvas');
-	this.canvas.width = 750;
-	this.canvas.height = 585;
-	this.canvas.id = 'game';
+    this.canvas.width = 750;
+    this.canvas.height = 585;
+    this.canvas.id = 'game';
 
     this.context = this.canvas.getContext('2d');
     this.grid = 15;

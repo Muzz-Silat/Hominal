@@ -15,4 +15,3 @@ def tag(command):
                         "-n: {str} cannot have any spaces.<br>",
                         "-c: {color} must be a valid color. see 'help tag' for more information"])
     return "invalid number of parameters, please ensure your expression is formatted correctly. see 'help tag' for more details."
-

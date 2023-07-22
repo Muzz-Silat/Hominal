@@ -58,6 +58,7 @@ let inputValue;
 var typetest = new TypeTest(inputElement);
 var snake;
 var pong;
+var tetris;
 //#############################################################
 
 //shows and focuses on input on load with a slight.
@@ -215,7 +216,7 @@ let mainEventListeners = function(condition){
         input.addEventListener('keydown', removeBR)
 
         //ensures that focus remains on input field for added convenience
-        document.addEventListener('keydown', keepFocus)
+        //document.addEventListener('keydown', keepFocus)
         document.addEventListener('click', keepFocus)
 
         input.addEventListener('keydown', preventDefault)
@@ -231,7 +232,7 @@ let mainEventListeners = function(condition){
         input.removeEventListener('keydown', removeBR)
 
         //ensures that focus remains on input field for added convenience
-        document.removeEventListener('keydown', keepFocus)
+        //document.removeEventListener('keydown', keepFocus)
         document.removeEventListener('click', keepFocus)
 
         input.addEventListener('keydown', preventDefault)
@@ -242,12 +243,12 @@ let mainEventListeners = function(condition){
 }
 mainEventListeners(true);
 
-
 function inputResponse(inputVal) {
     fetch(`/commands/${inputVal}`)
     .then(response => response.text())
     .then(text => {
         console.log(text);
+        //we add a space here to fix a bug with the newline.create() animation. it leaves out the last character, so space acts as a sacrificial char.
         switch(true){
             case text.includes("0x0000"): //empty newline on enter
                 text = "";
@@ -257,7 +258,7 @@ function inputResponse(inputVal) {
                     while(document.getElementsByClassName("line").length > 0){
                         document.getElementsByClassName("line")[0].remove()
                     }
-                    break; 
+                    break;
                 }
                 else{
                     if(text.includes("-a")){
@@ -266,7 +267,7 @@ function inputResponse(inputVal) {
                         while(document.getElementsByClassName("line").length > 0){
                             document.getElementsByClassName("line")[0].remove()
                         }
-                        break; 
+                        break;
                     }
                     else if(text.includes("-h")){
                         commandsHistory = []
@@ -321,19 +322,30 @@ function inputResponse(inputVal) {
                 break;
 
             case text.includes("0x0006"): //pong
-                pong = new Pong(inputElement);
-                pong.run()
+                tetris = new Tetris(inputElement);
+                tetris.run()
                 window.scrollTo(0, 0)
+                break;
+
+            case text.includes("9x9999"):
+                newline.create(text.replace("9x9999", ""), 0, true, 20)
+                setTimeout(() => {
+                    let hingus = document.getElementsByClassName("line")[document.getElementsByClassName("line").length-1]
+                    hingus.style.color = invertColor(getLocalvar("tagColor"))
+                    hingus.style.fontSize = "2px"
+                    hingus.style.lineHeight = "1"
+                    console.log(invertColor(getLocalvar("tagColor")))
+                }, 30);
                 break;
 
             default: //response is formatted from backend
                 console.log("running")
+                text += " ";
                 newline.create(text, 0, true)
                 break;
         }
     });
 }
-
 
 function convertToPlain(html){
     // Create a new div element
@@ -362,6 +374,7 @@ function setLocalvar(type, value){
     }
     return value
 }
+
 function getLocalvar(type){
     if (typeof(Storage) !== "undefined") {
         return localStorage.getItem(type);
@@ -369,4 +382,20 @@ function getLocalvar(type){
     } else {
         return window[type];
     }
+}
+
+function invertColor(color) {
+    let tempElement = document.createElement("div");
+    tempElement.style.backgroundColor = color;
+
+    input.before(tempElement);
+    channels = getComputedStyle(tempElement).backgroundColor;
+    tempElement.remove();
+
+    channels = channels.match(/\d+/g);
+    inverted_channels = channels.map(function(ch) {
+        return 305 - ch;
+    });
+    inverted = 'rgb(' + inverted_channels.join(', ') + ')';
+    return inverted
 }

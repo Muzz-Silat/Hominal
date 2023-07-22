@@ -37,7 +37,7 @@ def help(specify):
             "Type `help command' to find out more about the function `command'.",
             "Use `type-test' to find out more in general.",
             "A star (*) next to a name means that the command is disabled.",
-            br+br,
+            br+br
         ]
 
         commands = [
@@ -49,7 +49,7 @@ def help(specify):
             indentC + "options:/" + " ",
             indent + "-n/ {name}",
             indent + "-c/ {color}" + br,
-            "run/" + "{program}",
+            "run/" + "{program}"
         ]
 
         commands = formatOutput(commands)
@@ -69,7 +69,7 @@ def help(specify):
                     indentC+indentS+"clear",
                     br,
                     indentC+"DESCRIPTION",
-                    indentC+indentS+"clears your screen if this is possible.",
+                    indentC+indentS+"clears your screen if this is possible."
                 ]
                 return (responseDeveloper(array))
 
@@ -120,4 +120,3 @@ def help(specify):
                         indentC+indentS+indentS+indentS+"-t:"+indentS+"{Time}, This mode lets you test your typing speed for a certain number of seconds.",
                     ]
                 return (responseDeveloper(array1 + array2))
-
