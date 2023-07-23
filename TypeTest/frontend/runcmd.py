@@ -14,3 +14,5 @@ def run(command):
             return "0x0005"
         case "pong":
             return "0x0006"
+        case "tetris":
+            return "0x0007"

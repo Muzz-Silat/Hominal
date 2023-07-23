@@ -213,7 +213,9 @@ function Tetris(terminalInput) {
 
 	// game loop
 	this.loop = function() {
-		rAF = requestAnimationFrame(this.loop.bind(this));
+		if(running){
+			rAF = requestAnimationFrame(this.loop.bind(this));
+		}	
 		context.clearRect(0,0,canvas.width,canvas.height);
 
 		// draw the playfield
@@ -255,9 +257,8 @@ function Tetris(terminalInput) {
 			}
 		}
 	}
-
-	// listen to keyboard events to move the active tetromino
-	document.addEventListener('keydown', function(e) {
+	this.keyDown = function(e) {
+		e.preventDefault();
 		if (gameOver) return;
 
 		// left and right arrow keys (move)
@@ -292,7 +293,18 @@ function Tetris(terminalInput) {
 
 			tetromino.row = row;
 		}
-	});
+	}
+
+	this.initEventListeners = function(){
+		// listen to keyboard events to move the active tetromino
+		document.addEventListener('keydown', this.keyDown);
+	
+		hotkeys('ctrl+c, cmd+c', 'tetris', function(){
+			that.exit();
+		  });
+		  hotkeys.setScope('tetris')
+	}
+	
 
 	this.run = function(){
         //init main screen
@@ -306,6 +318,7 @@ function Tetris(terminalInput) {
         //creating the container and setting up game screen
         container = document.createElement("div");
         container.id = "gameContainer";
+		container.className = "tetris";
         terminalInput.before(container);
 
         //terminal completely removed now
@@ -313,7 +326,29 @@ function Tetris(terminalInput) {
 
         container.appendChild(canvas);
 
-        //this.initEventListeners();
+        this.initEventListeners();
         this.loop();
 	}
+	this.exit = function(text = ""){
+        //remove all event listeners
+        document.removeEventListener('keydown', this.keyDown);
+        hotkeys.deleteScope("tetris")
+
+        running = false;
+
+        container.remove()
+        this.returnToHome()
+
+        if(text == ""){
+            newline.create("exited tetris.", 300, true)
+        }else{
+            newline.create(text, 0, true)
+        }
+    };
+
+    this.returnToHome = function(){
+        terminalInput.before(mainScreen)
+        window.scrollTo(0, document.body.scrollHeight)
+        tetris = null;
+    }
 }

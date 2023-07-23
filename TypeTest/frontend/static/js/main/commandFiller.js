@@ -11,7 +11,7 @@
 //Refer to repo owner for more details.
 let commands = [
 [["help", "set", "clear", "run", "tag"]],
-[["clear", "tag", "run"], ["functionality", "will", "be", "added", "soon"], ["-a", "-h"], ["pong", "snake", "typetest"], ["-c", "-n"]]
+[["clear", "tag", "run"], ["functionality", "will", "be", "added", "soon"], ["-a", "-h"], ["pong", "snake", "tetris", "typetest"], ["-c", "-n"]]
 ];
 
 //Will store the currently typed command.
@@ -164,7 +164,7 @@ try {
 
 //Takes in a string and filters commands[] for everything that starts with the string.
 let filterCommands = function (string) {
-return commands[commandRow][commandCol].filter(str => str.startsWith(string));
+    return commands[commandRow][commandCol].filter(str => str.startsWith(string));
 };
 
 //Filters possibleCommands[] based on user input.

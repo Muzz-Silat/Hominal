@@ -322,10 +322,15 @@ function inputResponse(inputVal) {
                 break;
 
             case text.includes("0x0006"): //pong
+                pong = new Pong(inputElement);
+                pong.run()
+                window.scrollTo(0, 0)
+                break;
+            case text.includes("0x0007"): //tetris
                 tetris = new Tetris(inputElement);
                 tetris.run()
                 window.scrollTo(0, 0)
-                break;
+                break;    
 
             case text.includes("9x9999"):
                 newline.create(text.replace("9x9999", ""), 0, true, 20)
