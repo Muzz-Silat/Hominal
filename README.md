@@ -11,4 +11,6 @@ list of stuff to get done:
 - change to javascript based framework
     look into getting node.js
 
+-figure out how to locally load images for snake.js
+
 -figure out what stops last character from being displayed on responses sometimes

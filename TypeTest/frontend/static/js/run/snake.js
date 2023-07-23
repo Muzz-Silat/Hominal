@@ -4,6 +4,15 @@ function Snake(terminalInput){
     this.terminal = document.getElementById("main")
     let running = false;
 
+    let snakeHeadX = document.createElement("img");
+    snakeHeadX.src = "https://preview.redd.it/s2noytru6sdb1.png?width=1600&format=png&auto=webp&s=f9e8a2bcef592f4246aa07eb10cc15fac7efd62c";
+
+    let snakeHeadY = document.createElement("img");
+    snakeHeadY.src = "https://preview.redd.it/ufu6wsru6sdb1.png?width=1600&format=png&auto=webp&s=077c5fd3371a69510c54f837157bd63b272becf2"
+
+    let apple = document.createElement("img");
+    apple.src = "https://preview.redd.it/hqcg9my1bsdb1.png?width=960&crop=smart&auto=webp&s=d97bc1b3e0069ed91a02e6447b8b48242cb3d5a0"
+
     this.run = function(){
         this.initEventListeners() // default scope is 'all', we change it to snake so that only hotkeys defined in snake are used.
 
@@ -21,6 +30,8 @@ function Snake(terminalInput){
 
         this.context = this.canvas.getContext('2d');
         this.div.appendChild(this.canvas)
+        //this.div.appendChild(snakeHead)
+
 
         //draw score box
         this.scoreBox = document.createElement("div")
@@ -36,7 +47,7 @@ function Snake(terminalInput){
 
         // the canvas width & height, snake x & y, and the apple x & y, all need to be a multiples of the grid size in order for collision detection to work
         // (e.g. 16 * 25 = 400)
-        this.grid = 16;
+        this.grid = 20;
         this.count = 0;
 
         this.snake = {
@@ -76,7 +87,7 @@ function Snake(terminalInput){
       }
 
       // slow game loop to 15 fps instead of 60 (60/15 = 4)
-      if (++that.count < 4) {
+      if (++that.count < 3) {
         return;
       }
 
@@ -112,22 +123,29 @@ function Snake(terminalInput){
       }
 
       // draw apple
-      that.context.fillStyle = 'rgb(102, 146, 199)';
-      that.context.fillRect(that.apple.x, that.apple.y, that.grid-1, that.grid-1);
+      that.context.drawImage(apple, that.apple.x, that.apple.y, that.grid-1, that.grid-1);
 
       // draw snake one cell at a time
       that.context.fillStyle = 'greenyellow';
       that.snake.cells.forEach(function(cell, index) {
         // drawing 1 px smaller than the grid creates a grid effect in the snake body so you can see how long it is
-        that.context.fillRect(cell.x, cell.y, that.grid-1, that.grid-1);
+        if(index == 0){
+          if(that.snake.dy == 0){
+            that.context.drawImage(snakeHeadX, cell.x, cell.y, that.grid-1, that.grid-1);
+          }else{
+            that.context.drawImage(snakeHeadY, cell.x, cell.y, that.grid-1, that.grid-1);
+          }
+        }else{
+          that.context.fillRect(cell.x, cell.y, that.grid-1, that.grid-1);
+        }
 
         // snake ate apple
         if (cell.x === that.apple.x && cell.y === that.apple.y) {
           that.snake.maxCells++;
           that.scoreBox.innerHTML = that.snake.maxCells-4
           // canvas is 400x400 which is 25x25 grids
-          that.apple.x = that.getRandomInt(0, 25) * that.grid;
-          that.apple.y = that.getRandomInt(0, 25) * that.grid;
+          that.apple.x = that.getRandomInt(0, 20) * that.grid;
+          that.apple.y = that.getRandomInt(0, 20) * that.grid;
         }
 
         // check collision with all cells after this one (modified bubble sort)
@@ -142,8 +160,8 @@ function Snake(terminalInput){
             that.snake.dx = that.grid;
             that.snake.dy = 0;
 
-            that.apple.x = that.getRandomInt(0, 25) * that.grid;
-            that.apple.y = that.getRandomInt(0, 25) * that.grid;
+            that.apple.x = that.getRandomInt(0, 20) * that.grid;
+            that.apple.y = that.getRandomInt(0, 20) * that.grid;
           }
         }
       });

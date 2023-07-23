@@ -44,6 +44,7 @@ p{
 
 #terminalInput{
     margin-top: 1%;
+    padding-bottom: 1%;
 }
 #input:focus{
     border: none;
