@@ -9,53 +9,24 @@ indentS = "&nbsp;&nbsp;&nbsp;&nbsp;"
 space = "&nbsp;"
 br = "<br>"
 
-def formatOutput(commands):
-    #this exists to beautify the output
-    for i in range(len(commands)):
-        commandforward = ""
-        if len(commands[i].split("9")) > 1:
-            commandforward = commands[i].split("9")[0]
-            commands[i] = commands[i].split("9")[1]
-
-
-        command = commands[i].split("/")
-        params = command[1]
-        command = command[0]
-        commands[i] = command
-        if len(command) != 8:
-            for j in range(8-len(command)):
-                commands[i] = commands[i] + space
-            commands[i] = commandforward+commands[i]+params
-    return commands
-
 
 def help(specify):
     if(len(specify) <= 1):
-        definition = [
-            "TypeTest, version 1.01 (web-django)",
-            "These shell commands are defined internally.  Type `help' to see this list.",
-            "Type `help command' to find out more about the function `command'.",
-            "Use `type-test' to find out more in general.",
-            "A star (*) next to a name means that the command is disabled.",
-            br+br
-        ]
-
         commands = [
-            "clear/" + "[-a]"+br,
-
-            "help/" + "[command]"+br,
-
-            "tag/" + "{[-n]} " + " {[-c]}",
-            indentC + "options:/" + " ",
-            indent + "-n/ {name}",
-            indent + "-c/ {color}" + br,
-            "run/" + "{program}"
+            "<cmd class='highlight'>help   [command]   display help for a specific command.</cmd>"
+            +br+br,
+            "clear  [-a]"
+            +br,
+            "tag    {[-n]}  {[-c]}"
+            +br,
+            "   options:",
+            "       -n      {string}    tagname, no spaces.",
+            "       -c      {color}     css colors, rgb(x,x,x), hex(xxxxxx)."
+            +br,
+            "run    {program}"
         ]
 
-        commands = formatOutput(commands)
-        print (commands)
-
-        return(responseDeveloper(definition+commands))
+        return(responseDeveloper(commands))
 
     elif(len(specify) == 2):
         command = specify[1]

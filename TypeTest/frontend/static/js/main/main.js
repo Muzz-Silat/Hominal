@@ -2,10 +2,9 @@
 //eventListeners for the main home-screen and some of the global variables required for hominal.
 //#############################################################
 //BELOW ARE VARIABLES THAT MUST REMAIN GLOBAL
-
 //object that handles newlines, requires newline.js
 var newline = new NewLine();
-newline.create("Hominal [Version 1.01], All Rights Reserved. ", 100, true)
+fetch(`/commands/intro`).then(response => response.text()).then(text => newline.create(text+"<br>"+`Last Login: ${new Date().toLocaleString(undefined, {weekday: "short", year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit"}).replace(" at ", " ")} on <cmd class="highlight">${navigator.userAgent.split("(")[1].split(")")[0].replace(";", "")}<cmd>`, 200, true));
 
 //tagElement refers to the span that contains the prompt tag.
 var tagElement = document.getElementById("tag")
