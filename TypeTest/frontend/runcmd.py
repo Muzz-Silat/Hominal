@@ -9,10 +9,12 @@ def run(command):
                     try:
                         return "0x0004"+simpleGenerator(int(command[2]))
                     except:
-                         return command[2]+" is not a number"
+                        return command[2]+" is not a number"
         case "snake":
             return "0x0005"
         case "pong":
             return "0x0006"
         case "tetris":
             return "0x0007"
+        case "breakout":
+            return "0x0008"

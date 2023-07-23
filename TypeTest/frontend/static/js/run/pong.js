@@ -250,7 +250,7 @@ function Pong(terminalInput) {
         setTimeout(() => {
             this.exit(`${this.scoreBot.innerHTML}-<p>${this.scorePlayer.innerHTML}</p> to the bot... noob! `)
         }, 1000);
-       }else if(this.scorePlayer.innerHTML==10){
+      }else if(this.scorePlayer.innerHTML==10){
         let i = 0;
         let interval = setInterval(() => {
             i+=1

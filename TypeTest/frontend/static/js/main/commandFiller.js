@@ -11,7 +11,7 @@
 //Refer to repo owner for more details.
 let commands = [
 [["help", "set", "clear", "run", "tag"]],
-[["clear", "tag", "run"], ["functionality", "will", "be", "added", "soon"], ["-a", "-h"], ["pong", "snake", "tetris", "typetest"], ["-c", "-n"]]
+[["clear", "tag", "run"], ["functionality", "will", "be", "added", "soon"], ["-a", "-h"], ["breakout", "pong", "snake", "tetris", "typetest"], ["-c", "-n"]]
 ];
 
 //Will store the currently typed command.
