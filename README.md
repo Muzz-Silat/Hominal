@@ -3,7 +3,6 @@ Typing Project                                                      18-06-23
 list of stuff to get done:
 - fix typetest for higher values
 - add breakout game
-- add tetris
 - redefine help
 - pong singleplayer/multiplayer option
 - add set command functionality
