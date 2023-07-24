@@ -4,14 +4,23 @@ function Snake(terminalInput){
     this.terminal = document.getElementById("main")
     let running = false;
 
-    let snakeHeadX = document.createElement("img");
-    snakeHeadX.src = "https://preview.redd.it/s2noytru6sdb1.png?width=1600&format=png&auto=webp&s=f9e8a2bcef592f4246aa07eb10cc15fac7efd62c";
+    let snakeHeadX = new Image();
+    snakeHeadX.src = "/static/images/snake/snake-head-x.png";
+    //snakeHeadX.src = "https://preview.redd.it/s2noytru6sdb1.png?width=1600&format=png&auto=webp&s=f9e8a2bcef592f4246aa07eb10cc15fac7efd62c";
 
     let snakeHeadY = document.createElement("img");
-    snakeHeadY.src = "https://preview.redd.it/ufu6wsru6sdb1.png?width=1600&format=png&auto=webp&s=077c5fd3371a69510c54f837157bd63b272becf2"
+    //snakeHeadY.src = "https://preview.redd.it/ufu6wsru6sdb1.png?width=640&crop=smart&auto=webp&s=de73c120464c922e24d9a836d0488a25d2a4c399";
+    snakeHeadY.src = "/static/images/snake/snake-head-y.png";
 
-    let apple = document.createElement("img");
-    apple.src = "https://preview.redd.it/hqcg9my1bsdb1.png?width=960&crop=smart&auto=webp&s=d97bc1b3e0069ed91a02e6447b8b48242cb3d5a0"
+    let snakeBodyX = document.createElement("img");
+    snakeBodyX.src = "/static/images/snake/snake-body-x2.png"
+    //snakeBodyX.src = "https://preview.redd.it/6oxbyqju5wdb1.png?width=960&crop=smart&auto=webp&s=db46c2967b3cd4c1cbc269c4f14a7dd5bcce5d2b"
+
+    let snakeBodyY = document.createElement("img");
+    snakeBodyY.src = "/static/images/snake/snake-body-y2.png"
+    //snakeBodyY.src = "https://preview.redd.it/lk329rju5wdb1.png?width=960&crop=smart&auto=webp&s=e805fc9093015bfad02f0ac002eb7b11bd6e839c"
+
+    let apple;
 
     this.run = function(){
         this.initEventListeners() // default scope is 'all', we change it to snake so that only hotkeys defined in snake are used.
@@ -24,8 +33,8 @@ function Snake(terminalInput){
         terminalInput.before(this.div)
 
         this.canvas = document.createElement("canvas")
-        this.canvas.setAttribute("width", "400")
-        this.canvas.setAttribute("height", "400")
+        this.canvas.setAttribute("width", "800")
+        this.canvas.setAttribute("height", "800")
         this.canvas.id = "game"
 
         this.context = this.canvas.getContext('2d');
@@ -47,8 +56,12 @@ function Snake(terminalInput){
 
         // the canvas width & height, snake x & y, and the apple x & y, all need to be a multiples of the grid size in order for collision detection to work
         // (e.g. 16 * 25 = 400)
-        this.grid = 20;
+        this.grid = 40;
         this.count = 0;
+
+        //abilities
+        this.abilityActive = false;
+        this.invincibility = false;
 
         this.snake = {
             x: 160,
@@ -70,6 +83,18 @@ function Snake(terminalInput){
             y: 320
         };
 
+        this.fruits = [
+          {img: new Image(), src: "/static/images/snake/apple2.png"},
+          {img: new Image(), src: "https://preview.redd.it/odkqg5f8qvb71.jpg?auto=webp&s=5db42614efbb731913ee7f2a4277c8bc9ad18dc4"},
+          {img: new Image(), src: "https://www.nicepng.com/png/full/107-1079046_pixel-clipart-banana-banana-pixel-art-png.png"},
+          {img: new Image(), src: "https://openseauserdata.com/files/c346b22b6a171549f74b8145c301bf53.png"},
+          {img: new Image(), src: "https://static.vecteezy.com/system/resources/previews/021/952/440/original/southern-fried-chicken-fried-chicken-transparent-background-png.png"},
+        ]
+        for(img of this.fruits){
+          img.img.src = img.src;
+        }
+        that.selectFruit();
+
         running = true;
         requestAnimationFrame(that.loop);
     }
@@ -87,9 +112,12 @@ function Snake(terminalInput){
       }
 
       // slow game loop to 15 fps instead of 60 (60/15 = 4)
-      if (++that.count < 3) {
+      if (++that.count < 6) {
         return;
       }
+
+      //increment snake score if needed
+      that.scoreBox.innerHTML = that.snake.maxCells-4
 
       that.count = 0;
       that.context.clearRect(0,0,that.canvas.width,that.canvas.height);
@@ -136,13 +164,36 @@ function Snake(terminalInput){
             that.context.drawImage(snakeHeadY, cell.x, cell.y, that.grid-1, that.grid-1);
           }
         }else{
-          that.context.fillRect(cell.x, cell.y, that.grid-1, that.grid-1);
+          if(that.snake.dy == 0){
+            that.context.drawImage(snakeBodyX, cell.x, cell.y, that.grid-1, that.grid-1);
+          }else{
+            that.context.drawImage(snakeBodyY, cell.x, cell.y, that.grid-1, that.grid-1);
+          }
         }
 
         // snake ate apple
         if (cell.x === that.apple.x && cell.y === that.apple.y) {
+
+          if(apple.src.toString().includes("odkqg5f8qvb71")){
+
+            if(apple.src.toString().includes("odkqg5f8qvb71")){
+              that.invincibility = true;
+              that.abilityText()
+              setTimeout(function(){
+                that.invincibility = false;
+                that.abilityActive = false;
+              }, 5000)
+            }
+
+            that.abilityActive = true;
+          }
+
+          that.selectFruit()
+          while(that.abilityActive && apple.src.toString().includes("odkqg5f8qvb71")){
+            that.selectFruit()
+          }
+
           that.snake.maxCells++;
-          that.scoreBox.innerHTML = that.snake.maxCells-4
           // canvas is 400x400 which is 25x25 grids
           that.apple.x = that.getRandomInt(0, 20) * that.grid;
           that.apple.y = that.getRandomInt(0, 20) * that.grid;
@@ -150,9 +201,8 @@ function Snake(terminalInput){
 
         // check collision with all cells after this one (modified bubble sort)
         for (var i = index + 1; i < that.snake.cells.length; i++) {
-
           // snake occupies same space as a body part. reset game
-          if (cell.x === that.snake.cells[i].x && cell.y === that.snake.cells[i].y) {
+          if (index != 0 && that.snake.cells[0].x === that.snake.cells[i].x && that.snake.cells[0].y === that.snake.cells[i].y && !that.invincibility) {
             that.snake.x = 160;
             that.snake.y = 160;
             that.snake.cells = [];
@@ -162,9 +212,26 @@ function Snake(terminalInput){
 
             that.apple.x = that.getRandomInt(0, 20) * that.grid;
             that.apple.y = that.getRandomInt(0, 20) * that.grid;
+
+            running = false;
+
+            that.context.save()
+            that.context.fillStyle = tagColor;
+            that.context.strokeStyle = "white"
+            that.context.font = "3em monospace";
+            that.context.fillText("GAME OVER!", 0, that.canvas.height-60);
+            that.context.fillText("SCORE: "+that.scoreBox.innerHTML, 0, that.canvas.height-10);
+            that.context.font = "1.5em monospace";
+            that.context.fillText("press spacebar to play again", 10, 30);
+            that.context.save()
           }
         }
       });
+    }
+
+    this.selectFruit = function(){
+      apple = that.fruits[that.getRandomInt(0, that.fruits.length)].img;
+      console.log(apple)
     }
 
     this.exit = function() {
@@ -182,37 +249,58 @@ function Snake(terminalInput){
         snake = null;
     }
 
-    //unfortunately i do not have a better way of implementing capslock support
+    this.abilityText = function(){
+      this.writer = function(text, seconds){
+        let i = 0;
+        this.timer = setInterval(() => {
+          i++
+          that.context.fillStyle = "firebrick";
+          that.context.font = "1.5em monospace";
+          that.context.fillText(text+(seconds-(i/100)).toFixed(2)+"s", 10, that.canvas.height-10)
+          if(i >= seconds*100){
+            clearInterval(this.timer);
+          }
+        }, 10);
+      }
 
+      if(that.invincibility){
+        this.writer("edp445 grants invulnerability for: ", 5)
+      }
+    }
+
+    //unfortunately i do not have a better way of implementing capslock support
     this.initEventListeners = function () {
-        hotkeys('ctrl+c, cmd+c, a,s,d,w, a+s,a+w, w+a,w+d, s+a,s+d, d+w,d+s, capslock+a,capslock+s,capslock+d,capslock+w, capslock+a+s,capslock+a+w, capslock+w+a,capslock+w+d, capslock+s+a,capslock+s+d, capslock+d+w,capslock+d+s', 'snake', function(e, handler){
-            switch(true){
-                case hotkeys.isPressed(65) && that.snake.dx === 0:
-                    //console.log("A");
-                    that.snake.dx = -that.grid;
-                    that.snake.dy = 0;
-                break;
-                case hotkeys.isPressed(87) && that.snake.dy === 0:
-                    //console.log("W");
-                    that.snake.dy = -that.grid;
-                    that.snake.dx = 0;
-                break;
-                case hotkeys.isPressed(68) &&  that.snake.dx === 0:
-                    //console.log("D");
-                    that.snake.dx = that.grid;
-                    that.snake.dy = 0;
-                break;
-                case hotkeys.isPressed(83) && that.snake.dy === 0:
-                    //console.log("S");
-                    that.snake.dy = that.grid;
-                    that.snake.dx = 0;
-                break;
-            }
-    
-            if(handler.key == 'ctrl+c' || handler.key == 'cmd+c'){
-                that.exit();
-            }
-            return false; //prevent default
+        hotkeys('ctrl+c, cmd+c, a,s,d,w, a+s,a+w, w+a,w+d, s+a,s+d, d+w,d+s, capslock+a,capslock+s,capslock+d,capslock+w, capslock+a+s,capslock+a+w, capslock+w+a,capslock+w+d, capslock+s+a,capslock+s+d, capslock+d+w,capslock+d+s, space', 'snake', function(e, handler){
+          if(hotkeys.isPressed(65) && that.snake.dx === 0){
+            //console.log("A");
+            that.snake.dx = -that.grid;
+            that.snake.dy = 0;
+          }
+          else if(hotkeys.isPressed(87) && that.snake.dy === 0){
+            //console.log("W");
+            that.snake.dy = -that.grid;
+            that.snake.dx = 0;
+          }
+          else if(hotkeys.isPressed(68) &&  that.snake.dx === 0){
+            //console.log("D");
+            that.snake.dx = that.grid;
+            that.snake.dy = 0;
+          }
+          else if(hotkeys.isPressed(83) && that.snake.dy === 0){
+            //console.log("S");
+            that.snake.dy = that.grid;
+            that.snake.dx = 0;
+          }
+
+          if(handler.key == 'ctrl+c' || handler.key == 'cmd+c'){
+              that.exit();
+          }
+
+          if(handler.key == "space" && !running){
+            running = true;
+            that.loop()
+          }
+          return false; //prevent default for the keys that execute this function
         });
         hotkeys.setScope('snake')
       };
