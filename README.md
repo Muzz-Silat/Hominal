@@ -1,6 +1,9 @@
 #**Hominal Interactive Nexus**
 
 Type `help` to get started:
+
+
+![website logo](https://github.com/Muzz-Silat/TypingProject/blob/1749c9ced56b5000e5663ea4adb3b929337e4af7/TypeTest/frontend/static/images/terminal-favicon.png)
 ![a gif going over some basic usage of the website](https://s11.gifyu.com/images/SczdN.gif)
 
 
