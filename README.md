@@ -1,5 +1,10 @@
-Typing Project                                                      18-06-23
+#**Hominal Interactive Nexus**
 
+Type `help` to get started:
+![a gif going over some basic usage of the website](https://gifyu.com/image/SczdN)
+
+
+##TODO
 list of stuff to get done:
 - fix typetest for higher values
 - add breakout game
