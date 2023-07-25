@@ -334,9 +334,13 @@ function inputResponse(inputVal) {
                 breakout = new BreakOut(inputElement);
                 breakout.run()
                 window.scrollTo(0, 0)
-                break;    
+                break;
             case text.includes("9x9999"):
-                newline.create(text.replace("9x9999", ""), 0, true, 20)
+                if(text.includes('style="')){
+                    newline.create(text.replace("9x9999", ""), 0, true, 60)
+                }else{
+                    newline.create(text.replace("9x9999", ""), 0, true, 20)
+                }
                 setTimeout(() => {
                     let hingus = document.getElementsByClassName("line")[document.getElementsByClassName("line").length-1]
                     hingus.style.color = invertColor(getLocalvar("tagColor"))
