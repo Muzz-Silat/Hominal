@@ -25,7 +25,7 @@ function NewLine() {
      * @returns {void}
      */
     this.create = function (text, time = 0, animate = false, typeRate = 1) {
-      setTimeout(function () {
+    setTimeout(function () {
         this.text = text;
         //Create a new span element to represent the line.
         that.newline = document.createElement("span");
@@ -80,8 +80,8 @@ function NewLine() {
             }, 10);
         } else {
           //No animation, directly set the line's content.
-          that.newline.innerHTML = this.text;
+        that.newline.innerHTML = this.text;
         }
-      }, time);
+    }, time);
     };
 }

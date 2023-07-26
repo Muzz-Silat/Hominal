@@ -58,6 +58,7 @@ var snake;
 var pong;
 var tetris;
 var breakout;
+var search;
 //#############################################################
 
 //shows and focuses on input on load with a slight.
@@ -334,6 +335,10 @@ function inputResponse(inputVal) {
                 breakout = new BreakOut(inputElement);
                 breakout.run()
                 window.scrollTo(0, 0)
+                break;
+            case text.includes("0x1111"):
+                search = new Search(inputVal);
+                search.search()
                 break;
             case text.includes("9x9999"):
                 if(text.includes('style="')){

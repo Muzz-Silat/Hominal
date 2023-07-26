@@ -256,7 +256,7 @@ function Snake(terminalInput){
           i++
           that.context.fillStyle = "firebrick";
           that.context.font = "1.5em monospace";
-          that.context.fillText(text+(seconds-(i/100)).toFixed(2)+"s", 10, that.canvas.height-10)
+          that.context.fillText(text+(seconds-(i/100)).toFixed(1)+"s", 10, that.canvas.height-10)
           if(i >= seconds*100){
             clearInterval(this.timer);
           }

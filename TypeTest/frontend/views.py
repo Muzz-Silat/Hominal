@@ -37,6 +37,8 @@ def commands(request, command = None):
             return HttpResponse(tag(keywords))
         case "run":
             return HttpResponse(run(keywords))
+        case "search":
+            return HttpResponse("0x1111")
         case None:
             #all codes are handled through js on frontend
             return HttpResponse("0x0000")
