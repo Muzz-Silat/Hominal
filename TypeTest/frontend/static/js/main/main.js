@@ -18,27 +18,32 @@ var commandsHistory = [];                   //is stored in localStorage
 
 //loads and sets any variables that are stored in localStorage
 //you should define and initiate any variables that are stored in locStorage before this code.
-if (typeof(Storage) !== "undefined") {
-    // Code for localStorage/sessionStorage.
-    if (localStorage.length == 0){
-        console.log("running for the first time")
-        localStorage.setItem("tagName", tagName)
-        localStorage.setItem("tagColor", tagColor)
-        localStorage.setItem("commandsHistory", [])
-    };
-    //sets the name
-    tagElementName.innerText = localStorage.getItem("tagName");
-    //sets the color
-    tagColor = localStorage.getItem("tagColor")
-    tagElementName.style.color = tagColor;
+try{
+    if (typeof(Storage) !== "undefined") {
+        // Code for localStorage/sessionStorage.
+        if (localStorage.length == 0){
+            console.log("running for the first time")
+            localStorage.setItem("tagName", tagName)
+            localStorage.setItem("tagColor", tagColor)
+            localStorage.setItem("commandsHistory", [])
+        };
+        //sets the name
+        tagElementName.innerText = localStorage.getItem("tagName");
+        //sets the color
+        tagColor = localStorage.getItem("tagColor")
+        tagElementName.style.color = tagColor;
 
-    //sets the combination and ensures everything initializes correctly
-    tag = tagElement.innerHTML
-    commandsHistory = getLocalvar("commandsHistory").split("…").filter(str => str != "")
-    current_command = commandsHistory.length;
-} else {
-    // Sorry! No Web Storage support..
-    alert("Your browser does not support Web Storage. All changes in this session will be lost on refresh.");
+        //sets the combination and ensures everything initializes correctly
+        tag = tagElement.innerHTML
+        commandsHistory = getLocalvar("commandsHistory").split("…").filter(str => str != "")
+        current_command = commandsHistory.length;
+
+    } else {
+        // Sorry! No Web Storage support..
+        alert("Cookies are disabled on your browser.");
+    }
+}catch(e){
+    alert("Cookies are disabled on your browser.");
 }
 
 //main container for hominal, where the terminal interface is shown.
@@ -341,10 +346,13 @@ function inputResponse(inputVal) {
                 search.search()
                 break;
             case text.includes("9x9999"):
+                text = text.replace("9x9999", "")
+                let typeRate = convertToPlain(text).length/100
+                console.log(convertToPlain(text).length, typeRate)
                 if(text.includes('style="')){
-                    newline.create(text.replace("9x9999", ""), 0, true, 60)
+                    newline.create(text, 0, true, Number(typeRate))
                 }else{
-                    newline.create(text.replace("9x9999", ""), 0, true, 20)
+                    newline.create(text, 0, true, 20)
                 }
                 setTimeout(() => {
                     let hingus = document.getElementsByClassName("line")[document.getElementsByClassName("line").length-1]
@@ -387,19 +395,26 @@ function setCarat(element){
 
 //helpful for managing localStorage related variables while including support for browsers that lack it.
 function setLocalvar(type, value){
-    if (typeof(Storage) !== "undefined") {
-        localStorage.setItem(type, value)
-    } else {
+    try{
+        if (typeof(Storage) !== "undefined") {
+            localStorage.setItem(type, value)
+        } else {
+            window[type] = value;
+        }
+    }catch{
         window[type] = value;
     }
     return value
 }
 
 function getLocalvar(type){
-    if (typeof(Storage) !== "undefined") {
-        return localStorage.getItem(type);
-
-    } else {
+    try{
+        if (typeof(Storage) !== "undefined") {
+            return localStorage.getItem(type);
+        } else {
+            return window[type];
+        }
+    }catch{
         return window[type];
     }
 }

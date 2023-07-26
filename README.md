@@ -22,3 +22,5 @@ list of stuff to get done:
 -figure out how to locally load images for snake.js
 
 -figure out what stops last character from being displayed on responses sometimes
+
+-check out what happens to localStorage when cookies are disabled

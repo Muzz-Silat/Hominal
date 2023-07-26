@@ -148,6 +148,10 @@ rvalue{
     color: white;
     font-size: xx-large;
 }
+.hingus-color{
+    font-size:0.175vw;
+    font-weight: bold;
+}
 .hingus{
     text-decoration: none;
     color: inherit;
