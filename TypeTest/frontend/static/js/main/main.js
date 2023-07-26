@@ -165,6 +165,7 @@ let commandManager = function(event){
 }
 
 //handles submission of user input to backend, no linked scripts.
+let keysPressed = {};
 let submission = function(event) {
     event.preventDefault()
     let inputValue = convertToPlain(input.innerHTML);
@@ -173,6 +174,11 @@ let submission = function(event) {
         //formatting the users input, i.e. sanitizing input.
         inputValue = inputValue.replace("/", "")
         console.log("isolated input: " + inputValue)
+
+        if((keysPressed['Shift']) && event.key == 'Enter'){
+            inputValue = "search "+inputValue
+            keysPressed = {}
+        }
 
         //handing off input to the input handler
         inputResponse(inputValue)
@@ -194,6 +200,7 @@ let removeBR = function(e){
             e.returnValue = false;
         }
     }
+    keysPressed[event.key] = true;
 };
 
 //ensures that focus remains on input field for added convenience
