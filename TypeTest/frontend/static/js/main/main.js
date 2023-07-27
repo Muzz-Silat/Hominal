@@ -177,7 +177,7 @@ let submission = function(event) {
 
         if((keysPressed['Shift']) && event.key == 'Enter'){
             inputValue = "search "+inputValue
-            keysPressed = {}
+            
         }
 
         //handing off input to the input handler
@@ -185,6 +185,7 @@ let submission = function(event) {
         newline.create(tag + input.innerHTML, 0);
         input.innerHTML = "";
     }
+    keysPressed = {}
 }
 
 //ensures that content-editable elements don't get <br> added in when enter is pressed. no linked scripts.
