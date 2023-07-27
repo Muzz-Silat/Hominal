@@ -42,7 +42,10 @@ def commands(request, command = None):
 
     match command:
         case "intro":
-            return HttpResponse(responseDeveloper(intro))
+            if(keywords.__len__() > 1):
+                return HttpResponse(responseDeveloper(initiate))
+            else:
+                return HttpResponse(responseDeveloper(intro))
         case "help":
             return HttpResponse(help(keywords))
         case "clear":
@@ -58,17 +61,27 @@ def commands(request, command = None):
             return HttpResponse(run(keywords))
         case "search":
             return HttpResponse("0x1111")
+        case "set":
+            if(keywords.__len__() > 1):
+                keywords.pop(0)
+                return HttpResponse("0x2222"+' '.join(keywords))
         case None:
             #all codes are handled through js on frontend
             return HttpResponse("0x0000")
         case "hingus":
             randHingus = random.choice(hingi)
-            return HttpResponse("9x9999"+ responseDeveloper(randHingus))
+            return HttpResponse("9x9999"+ "typerate("+randHingus[0]+"*"+str(len(randHingus))+")"+ responseDeveloper(randHingus))
         case _:
             return HttpResponse("\'{}\' is not recognized as an internal or external command, operable program or batch file.".format(' '.join(keywords)))
 
 intro = [
-    "Hominal Interactive Nexus, [v1.00-alpha], All Rights Reserved.",
-    "These shell commands are defined internally. Type 'help' to see this list of commands.",
+    "Getting started:<br>",
+    help([""])+" Type 'help' to see this list of commands when need be.",
+    "Press 'tab' to display a list of commands you can type.",
     ""
+]
+
+initiate = [
+    "Hominal Interactive Nexus, [v1.00-alpha], All Rights Reserved.",
+    "A highly interactive, customizable, and utilitarian homepage for your browser.<br>",
 ]

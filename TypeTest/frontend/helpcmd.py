@@ -13,17 +13,24 @@ br = "<br>"
 def help(specify):
     if(len(specify) <= 1):
         commands = [
-            "<cmd class='highlight'>help   [command]   display help for a specific command.</cmd>"
-            +br+br,
-            "clear  [-a]"
-            +br,
-            "tag    {[-n]}  {[-c]}"
-            +br,
-            "   options:",
-            "       -n      {string}    tagname, no spaces.",
-            "       -c      {color}     css colors, rgb(x,x,x), hex(xxxxxx)."
-            +br,
-            "run    {program}"
+            "<button>about                      learn more about what you can do.</button>",
+            "   ",
+            "<button>clear  [-a]    [-h]        clear the screen:</button>",
+            "   ",
+            "       -a                      clear all.",
+            "       -h                      clear command history.",
+            "   ",
+            "<button>tag    {[-n]}  {[-c]}      configure your tag.</button>",
+            "   ",
+            "       -t      {string}        tagname, no spaces.",
+            "       -c      {color}         css colors, rgb(x,x,x), hex(xxxxxx).",
+            "   ",
+            "<button>run    {program}           run applets integrated with R.U.N.</button>",
+            "   ",
+            "<button>set    {program}           configure supported programs and settings.</button>",
+            "   ",
+            "<cmd class='highlight'>help   [command]   display help for a specific command.</cmd>",
+            "These commands are defined internally."
         ]
 
         return(responseDeveloper(commands))

@@ -13,6 +13,7 @@ let commands = [
 [["search", "run", "clear", "help", "tag", "set"]],
 [[""], ["breakout", "pong", "snake", "tetris", "typetest"], ["-a", "-h"], ["clear", "tag", "run"], ["-c", "-n"], ["functionality", "will", "be", "added", "soon"]]
 ];
+let commandsDuplicate = commands[0][0].slice();
 
 //Will store the currently typed command.
 let typedCommand = "";

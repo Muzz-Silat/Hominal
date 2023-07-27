@@ -4,7 +4,10 @@
 //BELOW ARE VARIABLES THAT MUST REMAIN GLOBAL
 //object that handles newlines, requires newline.js
 var newline = new NewLine();
-fetch(`/commands/intro`).then(response => response.text()).then(text => newline.create(text+"<br>"+`Last Login: ${new Date().toLocaleString(undefined, {weekday: "short", year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit"}).replace(" at ", " ")} on <cmd class="highlight">${navigator.userAgent.split("(")[1].split(")")[0].replaceAll(";", "")}<cmd>`, 200, true));
+var set = new Set();
+var goto = new Goto();
+var localStorageEmpty = false;
+runIntro();
 //tagElement refers to the span that contains the prompt tag.
 var tagElement = document.getElementById("tag")
 var tagElementName = document.getElementById("tag-name")
@@ -18,32 +21,30 @@ var commandsHistory = [];                   //is stored in localStorage
 
 //loads and sets any variables that are stored in localStorage
 //you should define and initiate any variables that are stored in locStorage before this code.
-try{
-    if (typeof(Storage) !== "undefined") {
-        // Code for localStorage/sessionStorage.
-        if (localStorage.length == 0){
-            console.log("running for the first time")
-            localStorage.setItem("tagName", tagName)
-            localStorage.setItem("tagColor", tagColor)
-            localStorage.setItem("commandsHistory", [])
-        };
-        //sets the name
-        tagElementName.innerText = localStorage.getItem("tagName");
-        //sets the color
-        tagColor = localStorage.getItem("tagColor")
-        tagElementName.style.color = tagColor;
-
-        //sets the combination and ensures everything initializes correctly
-        tag = tagElement.innerHTML
-        commandsHistory = getLocalvar("commandsHistory").split("…").filter(str => str != "")
-        current_command = commandsHistory.length;
-
-    } else {
-        // Sorry! No Web Storage support..
-        alert("Cookies are disabled on your browser.");
+if (typeof(Storage) !== "undefined") {
+    // Code for localStorage/sessionStorage.
+    if (localStorage.length == 0){
+        localStorageEmpty = true;
+        localStorage.setItem("tagName", tagName)
+        localStorage.setItem("tagColor", tagColor)
+        localStorage.setItem("commandsHistory", [])
     }
-}catch(e){
-    alert("Cookies are disabled on your browser.");
+    set.initialize();
+
+    //sets the name
+    tagElementName.innerText = localStorage.getItem("tagName");
+    //sets the color
+    tagColor = localStorage.getItem("tagColor")
+    tagElementName.style.color = tagColor;
+
+    //sets the combination and ensures everything initializes correctly
+    tag = tagElement.innerHTML
+    commandsHistory = getLocalvar("commandsHistory").split("…").filter(str => str != "")
+    current_command = commandsHistory.length;
+
+} else {
+    //No Web Storage support.. unlikely.
+    alert("Cookies are disabled on your browser. Any configurations will be lost on page refresh.");
 }
 
 //main container for hominal, where the terminal interface is shown.
@@ -260,7 +261,7 @@ function inputResponse(inputVal) {
     fetch(`/commands/${inputVal}`)
     .then(response => response.text())
     .then(text => {
-        console.log(text);
+        //console.log(text);
         //we add a space here to fix a bug with the newline.create() animation. it leaves out the last character, so space acts as a sacrificial char.
         switch(true){
             case text.includes("0x0000"): //empty newline on enter
@@ -271,6 +272,7 @@ function inputResponse(inputVal) {
                     while(document.getElementsByClassName("line").length > 0){
                         document.getElementsByClassName("line")[0].remove()
                     }
+                    runIntro();
                     break;
                 }
                 else{
@@ -343,20 +345,31 @@ function inputResponse(inputVal) {
                 tetris = new Tetris(inputElement);
                 tetris.run()
                 window.scrollTo(0, 0)
-                break;    
+                break;
             case text.includes("0x0008"): //breakout
                 breakout = new BreakOut(inputElement);
                 breakout.run()
-                window.scrollTo(0, 0)
                 break;
             case text.includes("0x1111"):
                 search = new Search(inputVal);
                 search.search()
                 break;
+            case text.includes("0x2222"):
+                set.edit(text.replace("0x2222", ""))
+                break;
             case text.includes("9x9999"):
                 text = text.replace("9x9999", "")
-                let typeRate = convertToPlain(text).length/100
-                console.log(convertToPlain(text).length, typeRate)
+                let hingusDetails = convertToPlain(text.split(")")[0].replace("typerate(", "")).split("*")
+                let hingusWidth = convertToPlain(hingusDetails[0]).length
+                let hingusHeight = Number(hingusDetails[1])
+                let typeRate;
+                if(hingusHeight>120){
+                    typeRate = Math.round(hingusWidth*(hingusHeight/120))
+                }else{
+                    typeRate = Math.round(hingusWidth*(120/hingusHeight))
+                }
+                text = text.split(")")[1]
+                console.log(typeRate, hingusHeight, hingusWidth)
                 if(text.includes('style="')){
                     newline.create(text, 0, true, Number(typeRate))
                 }else{
@@ -372,12 +385,14 @@ function inputResponse(inputVal) {
                 break;
 
             default: //response is formatted from backend
-                console.log("running")
-                text += " ";
-                if(text.includes("is not recognized as an internal or external command, operable program or batch file.")){
-                    newline.create(text, 0, false)
+                if(!shortcutsOBJ.execute(userInput)){
+                    console.log("running")
+                    text += " ";
+                    if(text.includes("is not recognized as an internal or external command, operable program or batch file.")){
+                        newline.create(text, 0, false)
+                    }
+                    else{newline.create(text, 0, true)}
                 }
-                else{newline.create(text, 0, true)}
                 break;
         }
     });
@@ -441,4 +456,19 @@ function invertColor(color) {
     });
     inverted = 'rgb(' + inverted_channels.join(', ') + ')';
     return inverted
+}
+
+function runIntro(){
+    if(localStorage.length == 0){
+        fetch(`/commands/intro init`).then(response => response.text()).then(text1 => {
+            fetch(`/commands/intro`).then(response => response.text()).then(text2 => {
+                newline.create(text1+text2+"<br>"+`Session started on:  <cmd class="highlight">${navigator.userAgent.split("(")[1].split(")")[0].replaceAll(";", "")}</cmd> at <cmd class="highlight">${new Date().toLocaleString(undefined, {weekday: "short", year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit"}).replace(" at ", " ")}</cmd>`, 0, true)
+            });
+        })
+    }
+    else{
+        fetch(`/commands/intro init`).then(response => response.text()).then(text1 => {
+            newline.create(text1+"<br>"+`Session started on:  <cmd class="highlight">${navigator.userAgent.split("(")[1].split(")")[0].replaceAll(";", "")}</cmd> at <cmd class="highlight">${new Date().toLocaleString(undefined, {weekday: "short", year: "numeric", month: "long", day: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit"}).replace(" at ", " ")}</cmd>`, 0, true)
+        })
+    }
 }

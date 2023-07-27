@@ -89,6 +89,8 @@ function Pong(terminalInput) {
       this.scoreBox.appendChild(this.scorePlayer);
       this.scorePlayer.innerHTML = 0
 
+      this.scoreBox.innerHTML+="&nbsp;-&nbsp;"
+
       this.scoreBot.id = "bot"
       this.scoreBox.appendChild(this.scoreBot);
       this.scoreBot.innerHTML = 0
