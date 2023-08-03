@@ -1,0 +1,24 @@
+{
+  "name": "hominal",
+  "version": "1.0.0",
+  "description": "hominal interactive nexus",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Muzz-Silat/TypingProject.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Muzz-Silat/TypingProject/issues"
+  },
+  "homepage": "https://github.com/Muzz-Silat/TypingProject#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "fs": "^0.0.1-security",
+    "random": "^4.1.0"
+  }
+}

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang= "en">
+
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8">
+        <meta name="keywords" content="Hominal">
+        <meta name="description" content="">
+        <title>Hominal</title>
+        <link rel="stylesheet" href="public/static/css/hominal.css" media="screen">
+        <link rel="shortcut icon" href="public/static/images/terminal-favicon.png" type="image/x-icon">
+        <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Ubuntu+Mono" />
+        <script src="https://unpkg.com/hotkeys-js/dist/hotkeys.min.js"></script>
+    </head>
+
+    <body>
+            <div id="main">
+            </div>
+            <div id="terminalInput" class="typed">
+                <span id="tag">
+                    <span id="tag-name" style="color: yellowgreen;">user@hominal</span>:<span
+                    class="tilda" style="color: rgb(102,146,199);">~</span>$
+                </span>
+                <span contenteditable="true" id="input" spellcheck="false"></span>
+            </div>
+    </body>
+
+    <script  src="src/search.js"></script>
+    <script  src="src/goto.js"></script>
+
+    <script  src="src/run/TypeTest.js"></script>
+    <script  src="src/run/snake.js"></script>
+    <script  src="src/run/pong.js"></script>
+    <script  src="src/run/tetris.js"></script>
+    <script  src= "src/run/breakout.js"></script>
+
+    <script  src="src/set/shortcuts.js"></script>
+    <script  src="src/set/set.js"></script>
+
+    <script src="src/main/newline.js"></script>
+    <script src="src/main/commandFiller.js"></script>
+    <script src="src/main/main.js"></script>
+</html>
