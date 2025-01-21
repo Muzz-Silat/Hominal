@@ -4,7 +4,7 @@
 
 Type `help` to get started:
 
-![a gif going over some basic usage of the website](https://s11.gifyu.com/images/SczdN.gif)
+![a gif going over some basic usage of the website](https://s13.gifyu.com/images/SeqFG.gif)
 
 
 ## TODO
